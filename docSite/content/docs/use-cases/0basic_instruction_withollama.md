@@ -22,7 +22,7 @@ weight: 501
   - 安装mySQL
   - 安装Redis
   - 安装OneAPI软件主体
-  - 
+    
 - 安装Ollama
   - 选择AI模型
   - 安装Ollama并载入模型
