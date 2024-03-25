@@ -10,7 +10,7 @@ weight: 501
 
 # 安装清单
 
-* [ ] 安装FastGPT
+* [ ] [安装FastGPT](#安装FastGPT)
 
   * [ ] 安装fastgpt 软件主体
   * [ ] 初始化 Mongo 副本集
@@ -61,7 +61,29 @@ weight: 501
 - Linux root 用户密码：Abc123456
 - 网络：国内大陆地区一线城市电信宽带，本教程不需要魔法
 
-  
+
+# 安装FastGPT
+
+## 一、获取docker-compose与config文件 ((20240319224308-3luzywh "*"))
+
+
+#### 获取docker-compose文件
+
+从以下任意一个链接下载docker-compose文件
+
+[https://raw.githubusercontent.com/labring/FastGPT/main/files/deploy/fastgpt/docker-compose.yml](https://raw.githubusercontent.com/labring/FastGPT/main/files/deploy/fastgpt/docker-compose.yml)
+
+[https://github.com/labring/FastGPT/blob/main/files/deploy/fastgpt/docker-compose.yml](https://github.com/labring/FastGPT/blob/main/files/deploy/fastgpt/docker-compose.yml)
+
+
+#### 获取config文件
+
+从以下任意一个链接下载docker-compose文件
+
+[https://raw.githubusercontent.com/labring/FastGPT/main/projects/app/data/config.json](https://raw.githubusercontent.com/labring/FastGPT/main/projects/app/data/config.json)
+
+[https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json](https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json)
+
 
 
 # 总结
