@@ -17,19 +17,20 @@ weight: 501
   - 调整端口
 
 - 安装M3E向量模型
+
 - 安装OneAPI
   - 安装mySQL
   - 安装Redis
   - 安装OneAPI软件主体
+  - 
 - 安装Ollama
+  - 选择AI模型
+  - 安装Ollama并载入模型
 
-  * [ ] 选择AI模型
-  * [ ] 安装Ollama并载入模型
-* [ ] 参数配置与调整
-
-  * [ ] ollama与OneAPI联调
-  * [ ] 在OneAPI平台添加M3E模型
-  * [ ] OneAPI适配fastGPT的config配置
+- 参数配置与调整
+  - ollama与OneAPI联调
+  - 在OneAPI平台添加M3E模型
+  - OneAPI适配fastGPT的config配置
 
 > 安装清单没有顺序要求，但阅读教程时建议由上到下阅读。
 
