@@ -85,37 +85,38 @@ weight: 501
 ## 二、执行安装
 
 1. 登陆alist，在“/home/banana”目录下建立“fastgpt”目录
+
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/204e5182-70be-4956-9cb1-1735d83b0e27)
-2. 把下载的文件通过alist上传，不需要重命名
+3. 把下载的文件通过alist上传，不需要重命名
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/2e745700-c57f-4d14-a429-46d87b232b16)
-3. 用alist打开docker-compose → 进入编辑模式
+4. 用alist打开docker-compose → 进入编辑模式
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/9513d04c-f3f0-4ff1-9568-5c9215e3a8ae)鼠标随便点击一下编辑器内 → 键盘同时按下Ctrl+F → 在弹出的搜索框中输入fastgpt、找到fastgpt这一块内容 → 将3000都改为3020 → 点击左下角“保存”。修改的目的是为oneapi保留3000端口。
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/565a1ddc-d3a8-4a92-82f5-af09bead46ab)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/0a7cc6d5-85fc-46cf-bfac-e40e5171c23d)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/c9d121e5-6f55-4671-94b1-9b84d7808337)
-4. 如果在国内，下一步是修改pg和fastgpt的镜像源，替换默认源为阿里的镜像源：把红框里的内容复制 → 选中绿框中的内容 → 粘贴，然后点击保存。
+5. 如果在国内，下一步是修改pg和fastgpt的镜像源，替换默认源为阿里的镜像源：把红框里的内容复制 → 选中绿框中的内容 → 粘贴，然后点击保存。
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/ac41ab43-f281-490e-a0e8-4dc2a2ced0ed)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/58d38e2d-4594-480d-8486-1217254f30a7)
-5. <a id="ft.2.5"></a>删除默认文档里的前四行注释，如图：
+6. <a id="ft.2.5"></a>删除默认文档里的前四行注释，如图：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/fcf8c177-79a7-4061-afa6-9d83b5b12e23)
-6. 删除oneapi相关内容，后面单独配置，在文档最下面
+7. 删除oneapi相关内容，后面单独配置，在文档最下面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/cd6122d0-1131-4e10-9661-aa6bea606877)
-7. 点击左下角“保存” 然后返回上一个页面
-8. 在1panel中，按以下步骤打开终端界面
+8. 点击左下角“保存” 然后返回上一个页面
+9. 在1panel中，按以下步骤打开终端界面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f10bcf17-6dea-458d-9196-8ddd60e871fd)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f139cce7-c240-46ce-9f54-be19720970ae)
 
     > 如果按图中指引，测试连接失败，可能是因为你的Linux不支持直接使用root用户进行远程ssh登录，改成普通用户即可，例如我的用户名叫banana，我就填写banana；注意，普通用户的密码和root的密码是不同的。
     >
 
-9. 在终端界面，输入su，进入root用户模式
+10. 在终端界面，输入su，进入root用户模式
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/be2b4a15-7343-4379-9d2e-625a2a0b7808)
-10. 输入命令：
+11. 输入命令：
 
      ```shell
      cd /home/banana/fastgpt&&docker-compose pull
      ```
-11. 开始拉取镜像：
+12. 开始拉取镜像：
      ![image](https://github.com/katfionn/FastGPT/assets/136874302/9de35906-47fa-4be8-95aa-1a7c93342dae)
     静待30分钟左右（等待时间取决于网速），然后在1panel观察容器是否正常：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/d4d6a1b9-ce20-4fd2-aac6-28d554af7227)
