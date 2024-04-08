@@ -177,8 +177,29 @@ weight: 501
 2. 把鼠标光标悬浮在 fastgpt 右边操作列 里 “更多”上面，找到“编辑”，单击它，如下图
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/462c5631-f728-44cc-a46c-4df576de917a)
    然后应该出现下图的弹窗：
-   
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/3217fea3-43b3-4c35-b225-d995ea44c0dd)
+3. 把弹窗向下滚动到底部，在“环境变量”这块内容里 → 找到`PORT=3000` → 修改3000为3020 → 点击右下角的“确定”
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/d75e5853-2fa2-413d-bb61-0f4f4f7f8ddc)
+4. 在弹出的弹窗中，点击确定：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/11767a66-8b99-484e-8fdd-ac3e5dafc0e0)
+5. 等待容器重启，fastgpt此处的端口号不一定会同步显示，：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/70860510-c0bc-4ba2-b8cd-5d2e5aab669a)
+6. 测试端口是否正常：打开浏览器新标签，输入你虚拟机的IP+端口，尝试访问fastgpt。如：我IP是192.168.1.5，端口是3020，那么我就在浏览器的地址栏输入：
+   ```
+   192.168.1.3:3020
+   ```
+7. 看到下图界面，说明配置成功了:
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/f3de37ff-a36c-4b89-9966-e81326b9ed90)
 
+## 五、登录后台，验证FastGPT是否安装成功
+
+用账号密码进行登录即可，依照以上步骤，不修改任何东西，那么你的默认账号密码为：
+```
+账号：root
+密码：1234
+```
+登陆后出现如下提示即为完成FastGPT安装：
+![image](https://github.com/katfionn/FastGPT/assets/136874302/063d9923-3b97-49d3-9963-fd49ed4cd26f)
 
 
 # 总结
