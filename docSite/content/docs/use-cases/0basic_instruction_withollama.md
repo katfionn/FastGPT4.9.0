@@ -89,7 +89,7 @@ weight: 501
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/204e5182-70be-4956-9cb1-1735d83b0e27)
 2. 把下载的文件通过alist上传，不需要重命名
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/2e745700-c57f-4d14-a429-46d87b232b16)
-3. <a id="ft.2.3"></a>用alist打开docker-compose → 进入编辑模式
+3. <a id=a id="ft.2.3"></a>用alist打开docker-compose → 进入编辑模式
 
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/9513d04c-f3f0-4ff1-9568-5c9215e3a8ae)
 鼠标随便点击一下编辑器内 → 键盘同时按下Ctrl+F → 在弹出的搜索框中输入fastgpt、找到fastgpt这一块内容 → 将3000都改为3020 → 点击左下角“保存”。修改的目的是为oneapi保留3000端口。
@@ -99,7 +99,7 @@ weight: 501
 4. 如果在国内，下一步是修改pg和fastgpt的镜像源，替换默认源为阿里的镜像源：把红框里的内容复制 → 选中绿框中的内容 → 粘贴，然后点击保存。
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/ac41ab43-f281-490e-a0e8-4dc2a2ced0ed)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/58d38e2d-4594-480d-8486-1217254f30a7)
-5. <a id="ft.2.5"></a>删除默认文档里的前四行注释，如图：
+5. <a id=a id="ft.2.5"></a>删除默认文档里的前四行注释，如图：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/fcf8c177-79a7-4061-afa6-9d83b5b12e23)
 6. 删除oneapi相关内容，后面单独配置，在文档最下面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/cd6122d0-1131-4e10-9661-aa6bea606877)
@@ -139,7 +139,7 @@ weight: 501
 
 1. 在1panel中，进入容器列表，找到mongo容器，点击操作列的“终端”按钮
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/c436c2af-1a3d-4452-8a57-78deea4e9dbb)
-2. <"ft.3.2"></a>在弹窗中，点击“连接”按钮，会进入一个终端界面
+2. <a id="ft.3.2"></a>在弹窗中，点击“连接”按钮，会进入一个终端界面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/aeaddaf1-6980-493d-869e-2d3b5c93e98c)
 3. 复制下面代码
 
@@ -148,7 +148,7 @@ weight: 501
     ```
 
     这行命令用于登录mongo数据库。其中，`-u`后面跟的是该数据库用户名，默认为`myusername`；`-p`后面跟的是该数据库密码，默认为`mypassword`。这里对应[安装时](###二、执行安装)的docker-compose文件配置，不修改默认都能对应的上，不懂的话不建议修改，否则可能出现稀奇古怪且很难找人解决的问题、他人排查起来也很困难。
-4. <"ft.3.4"></a>粘贴上一步的代码  到 [第2步](#ft.3.2)打开的终端界面，可以直接鼠标右键粘贴。随后终端界面会出些类似下面的文字，并且在最下面，命令行开头会有一个尖括号，说明上一步命令执行成功了
+4. <a id=a id="ft.3.4"></a>粘贴上一步的代码  到 [第2步](#ft.3.2)打开的终端界面，可以直接鼠标右键粘贴。随后终端界面会出些类似下面的文字，并且在最下面，命令行开头会有一个尖括号，说明上一步命令执行成功了
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/e1d0880b-0b27-47b2-908f-027f276e7f6f)
 5. 复制下面的代码
 
