@@ -201,6 +201,11 @@ weight: 501
 登陆后出现如下提示即为完成FastGPT安装：
 ![image](https://github.com/katfionn/FastGPT/assets/136874302/063d9923-3b97-49d3-9963-fd49ed4cd26f)
 
+# 安装M3E向量模型
+
+1. 根据实际情况选择下面任一命令，通过容器安装，先拷贝好安装命令
+2.   用CPU运行
+
 
 # 总结
 
