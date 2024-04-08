@@ -87,51 +87,51 @@ weight: 501
 1. 登陆alist，在“/home/banana”目录下建立“fastgpt”目录
 
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/204e5182-70be-4956-9cb1-1735d83b0e27)
-3. 把下载的文件通过alist上传，不需要重命名
+2. 把下载的文件通过alist上传，不需要重命名
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/2e745700-c57f-4d14-a429-46d87b232b16)
-4. 用alist打开docker-compose → 进入编辑模式
-    ![image](https://github.com/katfionn/FastGPT/assets/136874302/9513d04c-f3f0-4ff1-9568-5c9215e3a8ae)鼠标随便点击一下编辑器内 → 键盘同时按下Ctrl+F → 在弹出的搜索框中输入fastgpt、找到fastgpt这一块内容 → 将3000都改为3020 → 点击左下角“保存”。修改的目的是为oneapi保留3000端口。
+3. 用alist打开docker-compose → 进入编辑模式
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/9513d04c-f3f0-4ff1-9568-5c9215e3a8ae)鼠标随便点击一下编辑器内 → 键盘同时按下Ctrl+F → 在弹出的搜索框中输入fastgpt、找到fastgpt这一块内容 → 将3000都改为3020<a id="ft.2.3"></a> → 点击左下角“保存”。修改的目的是为oneapi保留3000端口。
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/565a1ddc-d3a8-4a92-82f5-af09bead46ab)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/0a7cc6d5-85fc-46cf-bfac-e40e5171c23d)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/c9d121e5-6f55-4671-94b1-9b84d7808337)
-5. 如果在国内，下一步是修改pg和fastgpt的镜像源，替换默认源为阿里的镜像源：把红框里的内容复制 → 选中绿框中的内容 → 粘贴，然后点击保存。
+4. 如果在国内，下一步是修改pg和fastgpt的镜像源，替换默认源为阿里的镜像源：把红框里的内容复制 → 选中绿框中的内容 → 粘贴，然后点击保存。
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/ac41ab43-f281-490e-a0e8-4dc2a2ced0ed)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/58d38e2d-4594-480d-8486-1217254f30a7)
-6. <a id="ft.2.5"></a>删除默认文档里的前四行注释，如图：
+5. <a id="ft.2.5"></a>删除默认文档里的前四行注释，如图：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/fcf8c177-79a7-4061-afa6-9d83b5b12e23)
-7. 删除oneapi相关内容，后面单独配置，在文档最下面
+6. 删除oneapi相关内容，后面单独配置，在文档最下面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/cd6122d0-1131-4e10-9661-aa6bea606877)
-8. 点击左下角“保存” 然后返回上一个页面
-9. 在1panel中，按以下步骤打开终端界面
+7. 点击左下角“保存” 然后返回上一个页面
+8. 在1panel中，按以下步骤打开终端界面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f10bcf17-6dea-458d-9196-8ddd60e871fd)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f139cce7-c240-46ce-9f54-be19720970ae)
 
     > 如果按图中指引，测试连接失败，可能是因为你的Linux不支持直接使用root用户进行远程ssh登录，改成普通用户即可，例如我的用户名叫banana，我就填写banana；注意，普通用户的密码和root的密码是不同的。
     >
 
-10. 在终端界面，输入su，进入root用户模式
+9. 在终端界面，输入su，进入root用户模式
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/be2b4a15-7343-4379-9d2e-625a2a0b7808)
-11. 输入命令：
+10. 输入命令：
 
      ```shell
      cd /home/banana/fastgpt&&docker-compose pull
      ```
-12. 开始拉取镜像：
+11. 开始拉取镜像：
      ![image](https://github.com/katfionn/FastGPT/assets/136874302/9de35906-47fa-4be8-95aa-1a7c93342dae)
     静待30分钟左右（等待时间取决于网速），然后在1panel观察容器是否正常：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/d4d6a1b9-ce20-4fd2-aac6-28d554af7227)
-13. 镜像拉取完毕：
+12. 镜像拉取完毕：
      ![image](https://github.com/katfionn/FastGPT/assets/136874302/e872cd35-cf7b-4627-a1b5-4dee14a699d2)
      通常来说，回到命令行了，就算是拉取完了，也就是说你可以继续打字了，说明[第5步](#ft.2.5)操作内容完成了
-14. 使用下面的命令构建容器：
+13. 使用下面的命令构建容器：
 
      ```shell
      docker-compose up -d
      ```
-15. 前往1panel容器界面，查看容器是否正常运行，逐个查看日志是否有报错
-16. 一般情况下正常启用的容器长这样：
+14. 前往1panel容器界面，查看容器是否正常运行，逐个查看日志是否有报错
+15. 一般情况下正常启用的容器长这样：
      ![image](https://github.com/katfionn/FastGPT/assets/136874302/4072e96b-0e13-4fa8-b6ca-c660d8e78e0c)
-17. 到这，FastGPT的软件主体就安装完成了，接下来进行数据初始化操作。
+16. 到这，FastGPT的软件主体就安装完成了，接下来进行数据初始化操作。
 
 ## 三、初始化 Mongo 副本集
 
@@ -169,7 +169,9 @@ weight: 501
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/d6597749-5edc-4ab4-83b5-71718805ebe0)
 8. 初始化数据完成
 
+## 四、修改fastgpt端口
 
+1. 由于不知名的原因，安装完容器后，在环境变量里会多出一个“配置端口”的参数，这里也需要改成3020，和[前面](#ft2.3)保持一致。在容器界面找到fastgpt
 
 
 
