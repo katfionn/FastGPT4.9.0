@@ -99,7 +99,7 @@ weight: 501
 4. 如果在国内，下一步是修改pg和fastgpt的镜像源，替换默认源为阿里的镜像源：把红框里的内容复制 → 选中绿框中的内容 → 粘贴，然后点击保存。
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/ac41ab43-f281-490e-a0e8-4dc2a2ced0ed)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/58d38e2d-4594-480d-8486-1217254f30a7)
-5. <a id="2.5"></a>删除默认文档里的前四行注释，如图：
+5. <a id="ft.2.5"></a>删除默认文档里的前四行注释，如图：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/fcf8c177-79a7-4061-afa6-9d83b5b12e23)
 6. 删除oneapi相关内容，后面单独配置，在文档最下面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/cd6122d0-1131-4e10-9661-aa6bea606877)
@@ -124,7 +124,7 @@ weight: 501
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/d4d6a1b9-ce20-4fd2-aac6-28d554af7227)
 12. 镜像拉取完毕：
      ![image](https://github.com/katfionn/FastGPT/assets/136874302/e872cd35-cf7b-4627-a1b5-4dee14a699d2)
-     通常来说，回到命令行了，就算是拉取完了，也就是说你可以继续打字了，说明[第5步](#2.5)操作内容完成了
+     通常来说，回到命令行了，就算是拉取完了，也就是说你可以继续打字了，说明[第5步](#ft.2.5)操作内容完成了
 13. 使用下面的命令构建容器：
 
      ```shell
