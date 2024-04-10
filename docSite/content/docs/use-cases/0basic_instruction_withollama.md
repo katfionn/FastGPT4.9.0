@@ -205,6 +205,17 @@ weight: 501
 
 1. 根据实际情况选择下面任一命令，通过容器安装，先拷贝好安装命令
     1. 用CPU运行
+       ```
+       docker run -d -p 6008:6008 --name=m3e-large-api registry.cn-hangzhou.aliyuncs.com/fastgpt_docker/m3e-large-api:latest
+       ```
+    2. 用GPU运行
+       ```
+       docker run -d -p 6008:6008 --gpus all --name=m3e-large-api registry.cn-hangzhou.aliyuncs.com/fastgpt_docker/m3e-large-api:latest
+       ```
+    3. 源镜像
+       ```
+       docker run -d -p 6200:6008 --name=m3e-large-api stawky/m3e-large-api:latest
+       ```
 
 
 # 总结
