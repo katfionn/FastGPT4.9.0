@@ -187,6 +187,7 @@ weight: 501
 3. 把弹窗向下滚动到底部，在“环境变量”这块内容里 → 找到`PORT=3000` → 修改3000为3020 → 点击右下角的“确定”
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/d75e5853-2fa2-413d-bb61-0f4f4f7f8ddc)
 4. 在弹出的弹窗中，点击确定：
+
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/11767a66-8b99-484e-8fdd-ac3e5dafc0e0)
 5. 等待容器重启，fastgpt此处的端口号不一定会同步显示，：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/70860510-c0bc-4ba2-b8cd-5d2e5aab669a)
@@ -205,6 +206,7 @@ weight: 501
 密码：1234
 ```
 登陆后出现如下提示即为完成FastGPT安装：
+
 ![image](https://github.com/katfionn/FastGPT/assets/136874302/063d9923-3b97-49d3-9963-fd49ed4cd26f)
 
 # 安装M3E向量模型
