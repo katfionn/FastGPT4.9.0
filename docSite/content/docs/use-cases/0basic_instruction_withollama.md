@@ -55,7 +55,7 @@ weight: 501
 - 主机：基于Vmware的Linux虚拟机、网卡选择了“桥接模式：直接连接物理网络”(不勾选“直接复制物理网络连接状态)
 - Linux配置：30G运存、100G硬盘、32核心CPU、无显卡
 - 宿主机IP：192.168.1.2
-- 虚拟机IP：192.168.1.3
+- 虚拟机IP：192.168.1.5
 - Linux 普通用户：banana
 - Linux 普通用户密码：ABCD1234
 - Linux root 用户密码：Abc123456
@@ -108,8 +108,8 @@ weight: 501
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f10bcf17-6dea-458d-9196-8ddd60e871fd)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f139cce7-c240-46ce-9f54-be19720970ae)
 
-    > 如果按图中指引，测试连接失败，可能是因为你的Linux不支持直接使用root用户进行远程ssh登录，改成普通用户即可，例如我的用户名叫banana，我就填写banana；注意，普通用户的密码和root的密码是不同的。
-    >
+    > 如果按图中指引，测试连接失败，可能是因为你的Linux不支持直接使用root用户进行远程ssh登录，改成普通用户即可，例如我的用户名叫banana，我就填写banana；
+    > 注意，普通用户的密码和root的密码是不同的。如果用普通用户登录，那么你需要看第9点，反之可以跳过第9点。
 
 9. 在终端界面，输入su，进入root用户模式
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/be2b4a15-7343-4379-9d2e-625a2a0b7808)
@@ -186,7 +186,7 @@ weight: 501
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/70860510-c0bc-4ba2-b8cd-5d2e5aab669a)
 6. 测试端口是否正常：打开浏览器新标签，输入你虚拟机的IP+端口，尝试访问fastgpt。如：我IP是192.168.1.5，端口是3020，那么我就在浏览器的地址栏输入：
    ```
-   192.168.1.3:3020
+   192.168.1.5:3020
    ```
 7. 看到下图界面，说明配置成功了:
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/f3de37ff-a36c-4b89-9966-e81326b9ed90)
@@ -309,8 +309,8 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
           - ./data/oneapi:/data
           - ./logs:/app/logs
         environment:
-          - SQL_DSN=oneapi:123456@tcp(192.168.1.3:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
-          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.3:6379)//redis
+          - SQL_DSN=oneapi:123456@tcp(192.168.1.5:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
+          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.5:6379)//redis
           - SESSION_SECRET=random_string  # 修改为随机字符串
           - TZ=Asia/Shanghai
     #      - NODE_TYPE=slave  # 多机部署时从节点取消注释该行
@@ -323,13 +323,13 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
           retries: 3
     ```
 
-    可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是192.168.1.5，而你的是192.168.20.12，就要替换上面文本中的192.168.1.3为192.168.20.12。可以使用Ctrl+F搜索/替换。
+    可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是192.168.1.5，而你的是192.168.20.12，就要替换上面文本中的192.168.1.5为192.168.20.12。可以使用Ctrl+F搜索/替换。
 
     实际你需要修改的就是**oneapi块**里、**environment**的sql和redis的ip：
 
     ```yml
-          - SQL_DSN=oneapi:123456@tcp(192.168.1.3:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
-          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.3:6379)//redis
+          - SQL_DSN=oneapi:123456@tcp(192.168.1.5:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
+          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.5:6379)//redis
     ```
 3. 在1panel的“((20240319225622-04s2hbe "主机-终端"))”界面，粘贴下列指令到终端中并回车，拉取镜像
 
