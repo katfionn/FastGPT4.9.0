@@ -259,6 +259,100 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 > * 鉴于多次尝试，用官方文件直接安装基于容器的oneapi时，都会卡在mysql用不了的情况(个人有这需求)；所以最终解决办法是：先手动安装好mysql、手动建好与官方配置里一模一样的数据库，然后再安装oneapi。
 > * 通过1panel应用商店安装数据库，有利于像我一样的超级小奶白，通过友好且可视化的界面备份/回滚数据库。
 
+## 一、安装mySQL ((20240321014308-ji16gzc "*"))
+
+1. 进入1panel后台，找到应用商店的“全部 - 数据库”分类，找到MySQL并点击“安装”：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/0cf181f3-c9bb-4307-a477-8345d1db06ba)
+2. 在弹窗中，修改数据库密码为自己熟悉的 → 勾选“端口外部访问” → 点击右下角的确定
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/f4478281-739a-4ee1-958c-f6e1d310a26d)
+3. 然后会进入安装过程，等待安装完成
+4. 如果安装完成了，你可以在“应用商店 - 已安装”分类下找到状态为“已启动”的应用，应能看到mySQL应用已启动：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/eb1984f3-468e-4be1-89bb-d1c2ebe402d9)
+5. 对照opeapi的官方docker-conpose文档，按下列信息与图中的步骤，创建数据库
+   `数据库名称：one-api`  `用户名：oneapi` `密码：123456`
+   具体操作如下图：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/56a21289-01e1-4cb6-9be2-8d2553e075e4)
+   新建成功后，会出现以下界面：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/938865d1-4d88-4cad-865f-f5e734edd992)
+   
+
+## 二、安装redis
+
+1. 进入1panel后台，找到应用商店的“全部 - 数据库”分类，找到Redis并点击“安装”：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/e78cb4a4-bd01-4208-ba0e-c9271b57363b)
+2. 在弹窗中，修改数据库密码为自己熟悉的 → 勾选“端口外部访问” → 点击右下角的确定
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/210b5220-38c6-4ba7-9fdc-deee7d54d6a1)
+3. 等待数分钟后(取决于电脑性能和网络速度)，就安装完成了，可以在应用商店的“已安装”分类中，找到Redis，如下图：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/a233a4a1-0d3c-41b2-93f3-97c03b92ff6a)
+4. 到这，Redis就安装好了，需要记录((20240322142908-jhug6g1 "第2步"))的信息，例如案例中我的是：
+   用户(默认)：root
+   密码：abc123
+   端口：6379
+
+## 三、安装OneAPI
+
+1. 打开你的alist → 然后点开/home/banana目录 → 新建名叫“redis”的文件夹 → 从官方项目[下载yml文件](https://github.com/songquanpeng/one-api/blob/main/docker-compose.yml "官方yml文件") ((20240321015156-z3cm0eq "*"))
+2. 由于本地事先装好了数据库，所以下载了官方的文档后，我们需要做一些修改，下面是修改好之后的成品：
+
+    ```yml
+    version: '3.4'
+
+    services:
+      one-api:
+        image: "${REGISTRY:-docker.io}/justsong/one-api:latest"
+        container_name: one-api
+        restart: always
+        command: --log-dir /app/logs
+        ports:
+          - "3000:3000"
+        volumes:
+          - ./data/oneapi:/data
+          - ./logs:/app/logs
+        environment:
+          - SQL_DSN=oneapi:123456@tcp(192.168.1.3:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
+          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.3:6379)//redis
+          - SESSION_SECRET=random_string  # 修改为随机字符串
+          - TZ=Asia/Shanghai
+    #      - NODE_TYPE=slave  # 多机部署时从节点取消注释该行
+    #      - SYNC_FREQUENCY=60  # 需要定期从数据库加载数据时取消注释该行
+    #      - FRONTEND_BASE_URL=https://openai.justsong.cn  # 多机部署时从节点取消注释该行
+        healthcheck:
+          test: [ "CMD-SHELL", "wget -q -O - http://localhost:3000/api/status | grep -o '\"success\":\\s*true' | awk -F: '{print $2}'" ]
+          interval: 30s
+          timeout: 10s
+          retries: 3
+    ```
+
+    可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是192.168.1.5，而你的是192.168.20.12，就要替换上面文本中的192.168.1.3为192.168.20.12。可以使用Ctrl+F搜索/替换。
+
+    实际你需要修改的就是**oneapi块**里、==environment==的sql和redis的ip：
+
+    ```yml
+          - SQL_DSN=oneapi:123456@tcp(192.168.1.3:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
+          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.3:6379)//redis
+    ```
+3. 在1panel的“((20240319225622-04s2hbe "主机-终端"))”界面，粘贴下列指令到终端中并回车，拉取镜像
+
+    ```
+    docker-compose pull
+    ```
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/bf6a6f48-5e7e-42c8-b7f9-81ac19e374a4)
+4. 接着直接粘贴下列指令到终端中并回车，在后台运行容器
+
+    ```
+    docker-compose up -d
+    ```
+
+    等命令行运行完、再次出现输入提示，就可以在1panel的容器界面看到这个容器正常运行了
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/b3580425-bde3-4022-880c-5752a11b48a5)
+5. 浏览器中输入地址“http://192.168.1.5:3000”验证一下是否可以正常访问
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/7c72b06e-1f05-4fe9-a8d7-962e2bb3eca0)
+    出现上图界面，代表oneapi已安装完成
+
+
+
+
+
 # 总结
 
   本教程可以快速帮助没有任何AI基础理论、Linux系统基础知识、服务器运维知识的小白上手安装使用，帮助像我一样傻乎乎超级小白入门体验AI产品。
