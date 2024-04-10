@@ -216,6 +216,42 @@ weight: 501
        ```
        docker run -d -p 6200:6008 --name=m3e-large-api stawky/m3e-large-api:latest
        ```
+2. 连接上机器的SSH终端界面，进入root模式
+3. 将上面复制的命令粘贴到命令行，然后回车，出现以下界面说明命令执行成功
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/9ffa8b13-d1e4-49ec-8940-1a0a684b3eb9)
+   出现下图界面，说明安装应该完成了，下一步前往1panel“容器”界面查看
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/43479c55-d105-4269-ab65-bdabe28e219a)
+4. 前往1panel界面查看，显示已启动、日志无异常，则先当作他安装成功了，需要后面的步骤才能验证他能不能用
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/a2ebd1c3-8a77-4e64-9e55-a276a376aed8)
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/976a51a6-3598-483a-86ba-944f39e4c949)
+5. 修改M3E的容器重启策略为“一直重启”，这步如果不操作，每次开机后需要手动启用容器：
+   在1panel的容器界面：找到M3E的容器 → 然后鼠标放在“更多”上 → 点击弹出列表里的“编辑” ，如下面图一所示：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/45d99de1-316e-4885-b734-f26f0e50f0cb)
+   然后找到“重启规则”板块 → 选择“一直重启” → 点击右下角“确定” → 然后在弹出的提示弹窗中再点击“确定”，如下图所示：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/9add86b6-d0d3-4437-a8a5-c4dd1e122f41)
+6. 到这为止，M3E向量模型安装完成
+
+### 记录关键信息 ((20240320013901-s0zz5y8 "*"))
+
+
+* M3E模型的名字
+
+```shell
+m3e
+```
+
+* M3E模型的Base_Url
+  其中**192.168.1.5**是我的IP，可以替换成你自己的
+
+```shell
+http://192.168.1.3:6008
+```
+
+* M3E模型的密钥（默认）
+
+```shell
+aaabbbcccdddeeefffggghhhiiijjjkkk
+```
 
 
 # 总结
