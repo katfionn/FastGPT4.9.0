@@ -356,7 +356,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 5. 浏览器中输入地址“http://192.168.1.5:3000”验证一下是否可以正常访问
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/7c72b06e-1f05-4fe9-a8d7-962e2bb3eca0)
    出现上图界面，代表oneapi已安装完成，可使用默认账号密码登录：
-   账号
+   
    账号
    ```
    root
