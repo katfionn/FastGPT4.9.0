@@ -124,7 +124,9 @@ weight: 501
     静待30分钟左右（等待时间取决于网速），然后在1panel观察容器是否正常：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/d4d6a1b9-ce20-4fd2-aac6-28d554af7227)
 13. 镜像拉取完毕：
+
      ![image](https://github.com/katfionn/FastGPT/assets/136874302/e872cd35-cf7b-4627-a1b5-4dee14a699d2)
+
      通常来说，回到命令行了，就算是拉取完了，也就是说你可以继续打字了，说明[第5步](#ft.2.5)操作内容完成了
 14. 使用下面的命令构建容器：
 
