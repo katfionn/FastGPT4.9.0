@@ -1,4 +1,4 @@
-![image](https://github.com/katfionn/FastGPT/assets/136874302/64a0c514-042a-4d56-946f-b18de6f52550)---
+---
 title: "使用Ollama对接fastgpt"
 description: "喂饭级教程"
 icon: "sign_language"
