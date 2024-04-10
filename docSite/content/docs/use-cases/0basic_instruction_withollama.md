@@ -259,7 +259,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 > * 鉴于多次尝试，用官方文件直接安装基于容器的oneapi时，都会卡在mysql用不了的情况(个人有这需求)；所以最终解决办法是：先手动安装好mysql、手动建好与官方配置里一模一样的数据库，然后再安装oneapi。
 > * 通过1panel应用商店安装数据库，有利于像我一样的超级小奶白，通过友好且可视化的界面备份/回滚数据库。
 
-## 一、安装mySQL ((20240321014308-ji16gzc "*"))
+## 一、安装mySQL
 
 1. 进入1panel后台，找到应用商店的“全部 - 数据库”分类，找到MySQL并点击“安装”：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/0cf181f3-c9bb-4307-a477-8345d1db06ba)
@@ -280,11 +280,11 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 1. 进入1panel后台，找到应用商店的“全部 - 数据库”分类，找到Redis并点击“安装”：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/e78cb4a4-bd01-4208-ba0e-c9271b57363b)
-2. 在弹窗中，修改数据库密码为自己熟悉的 → 勾选“端口外部访问” → 点击右下角的确定
+2. <a id="oa.2.2"></a>在弹窗中，修改数据库密码为自己熟悉的 → 勾选“端口外部访问” → 点击右下角的确定
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/210b5220-38c6-4ba7-9fdc-deee7d54d6a1)
 3. 等待数分钟后(取决于电脑性能和网络速度)，就安装完成了，可以在应用商店的“已安装”分类中，找到Redis，如下图：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/a233a4a1-0d3c-41b2-93f3-97c03b92ff6a)
-4. 到这，Redis就安装好了，需要记录((20240322142908-jhug6g1 "第2步"))的信息，例如案例中我的是：
+4. 到这，Redis就安装好了，需要记录[第2步](#oa.2.2)的信息，例如案例中我的是：
    用户(默认)：root
    密码：abc123
    端口：6379
