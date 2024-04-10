@@ -172,6 +172,7 @@ weight: 501
 6. 粘贴上一步的代码  到[第4步](#ft.3.4) 的终端界面中，即那个尖括号后面，可以右键粘贴。然后按一次回车，应会出现OK提示，如下图：
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/78d2b8b1-babb-40fd-869e-0ccaf42020c3)
 7. 点击弹窗左上角“返回”或 按一次键盘左上角的ESC退出终端界面
+
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/d6597749-5edc-4ab4-83b5-71718805ebe0)
 8. 初始化数据完成
 
