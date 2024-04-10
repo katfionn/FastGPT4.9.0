@@ -1,4 +1,4 @@
----
+![image](https://github.com/katfionn/FastGPT/assets/136874302/64a0c514-042a-4d56-946f-b18de6f52550)---
 title: "使用Ollama对接fastgpt"
 description: "喂饭级教程"
 icon: "sign_language"
@@ -325,7 +325,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
     可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是192.168.1.5，而你的是192.168.20.12，就要替换上面文本中的192.168.1.3为192.168.20.12。可以使用Ctrl+F搜索/替换。
 
-    实际你需要修改的就是**oneapi块**里、==environment==的sql和redis的ip：
+    实际你需要修改的就是**oneapi块**里、**environment**的sql和redis的ip：
 
     ```yml
           - SQL_DSN=oneapi:123456@tcp(192.168.1.3:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
