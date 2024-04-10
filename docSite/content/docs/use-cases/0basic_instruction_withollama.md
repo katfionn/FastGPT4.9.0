@@ -255,9 +255,9 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 # 安装OneAPI
 
-* OneAPI的docker文件官方地址：https://github.com/songquanpeng/one-api/blob/main/docker-compose.yml ((20240321012024-wj66rwb "*"))
-* 鉴于多次尝试，用官方文件直接安装基于容器的oneapi时，都会卡在mysql用不了的情况(个人有这需求)；所以最终解决办法是：先手动安装好mysql、手动建好与官方配置里一模一样的数据库，然后再安装oneapi。
-* 通过1panel应用商店安装数据库，有利于像我一样的超级小奶白，通过友好且可视化的界面备份/回滚数据库。
+> OneAPI的docker文件官方地址：https://github.com/songquanpeng/one-api/blob/main/docker-compose.yml ((20240321012024-wj66rwb "*"))
+> 鉴于多次尝试，用官方文件直接安装基于容器的oneapi时，都会卡在mysql用不了的情况(个人有这需求)；所以最终解决办法是：先手动安装好mysql、手动建好与官方配置里一模一样的数据库，然后再安装oneapi。
+> 通过1panel应用商店安装数据库，有利于像我一样的超级小奶白，通过友好且可视化的界面备份/回滚数据库。
 
 # 总结
 
