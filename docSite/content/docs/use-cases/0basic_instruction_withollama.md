@@ -143,6 +143,7 @@ weight: 501
 1. 在1panel中，进入容器列表，找到mongo容器，点击操作列的“终端”按钮
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/c436c2af-1a3d-4452-8a57-78deea4e9dbb)
 2. <a id="ft.3.2"></a>在弹窗中，点击“连接”按钮，会进入一个终端界面
+
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/aeaddaf1-6980-493d-869e-2d3b5c93e98c)
 3. 复制下面代码
 
