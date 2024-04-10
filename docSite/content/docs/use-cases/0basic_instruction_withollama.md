@@ -181,7 +181,8 @@ weight: 501
 1. 由于不知名的原因，安装完容器后，在环境变量里会多出一个“配置端口”的参数，这里也需要改成3020，和[前面](#ft.2.3)保持一致。在容器界面找到fastgpt
 2. 把鼠标光标悬浮在 fastgpt 右边操作列 里 “更多”上面，找到“编辑”，单击它，如下图
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/462c5631-f728-44cc-a46c-4df576de917a)
-   然后应该出现下图的弹窗：
+   然后应该出现下图的侧边弹窗：
+
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/3217fea3-43b3-4c35-b225-d995ea44c0dd)
 3. 把弹窗向下滚动到底部，在“环境变量”这块内容里 → 找到`PORT=3000` → 修改3000为3020 → 点击右下角的“确定”
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/d75e5853-2fa2-413d-bb61-0f4f4f7f8ddc)
