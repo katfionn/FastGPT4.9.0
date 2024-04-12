@@ -416,7 +416,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 ------
 
 
-# 参数配置与调整<a id="oa.3.5"></a>
+# 参数配置与调整
 
 开始之前，回顾下此前记录的信息：
 
