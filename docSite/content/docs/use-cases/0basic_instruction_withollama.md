@@ -245,7 +245,7 @@ weight: 501
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/9add86b6-d0d3-4437-a8a5-c4dd1e122f41)
 6. 到这为止，M3E向量模型安装完成
 
-### 记录关键信息 ((20240320013901-s0zz5y8 "*"))
+### 记录关键信息
 
 
 * M3E模型的名字
@@ -363,7 +363,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
     等命令行运行完、再次出现输入提示，就可以在1panel的容器界面看到这个容器正常运行了
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/b3580425-bde3-4022-880c-5752a11b48a5)
-5. <a id="oa.3.5.1"></a> 浏览器中输入地址“http://192.168.1.5:3000”验证一下是否可以正常访问
+5. 浏览器中输入地址“http://192.168.1.5:3000”验证一下是否可以正常访问<a id="oa.3.5.1"></a>
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/7c72b06e-1f05-4fe9-a8d7-962e2bb3eca0)
    出现上图界面，代表oneapi已安装完成，可使用默认账号密码<a id="oa.3.5.2"></a>登录：
    
