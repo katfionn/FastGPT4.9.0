@@ -382,7 +382,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 # 安装Ollama
 
-## 一、选择AI大模型
+## 一、选择AI模型
 
 1. 打开ollama模型库的[官方地址](https://ollama.com/library "ollama模型库")
 2. 找到想要的模型，例如我是[openchat](https://ollama.com/library/openchat)，复制这个模型的运行指令：
