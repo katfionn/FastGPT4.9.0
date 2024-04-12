@@ -19,9 +19,9 @@ weight: 501
 - [安装M3E向量模型](#安装M3E向量模型)
 
 - [安装OneAPI](#安装OneAPI)
-  - [安装mySQL](###一、安装mySQL)
-  - [安装Redis](###二、安装Redis)
-  - [安装OneAPI软件主体](###安装OneAPI软件主体)
+  - [安装mySQL](#一安装mysql)
+  - [安装Redis](#二安装redis)
+  - [安装OneAPI软件主体](#安装oneapi软件主体)
     
 - 安装Ollama
   - 选择AI模型
@@ -299,7 +299,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 ## 三、安装OneAPI
 
-1. 打开你的alist → 然后点开/home/banana目录 → 新建名叫“redis”的文件夹 → 从官方项目[下载yml文件](https://github.com/songquanpeng/one-api/blob/main/docker-compose.yml "官方yml文件") ((20240321015156-z3cm0eq "*"))
+1. 打开你的alist → 然后点开/home/banana目录 → 新建名叫“redis”的文件夹 → 从官方项目[下载yml文件](https://github.com/songquanpeng/one-api/blob/main/docker-compose.yml "官方yml文件")
 2. 由于本地事先装好了数据库，所以下载了官方的文档后，我们需要做一些修改，下面是修改好之后的成品：
 
     ```yml
@@ -331,7 +331,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
           retries: 3
     ```
 
-    可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是192.168.1.5，而你的是192.168.20.12，就要替换上面文本中的192.168.1.5为192.168.20.12。可以使用Ctrl+F搜索/替换。
+    可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是`192.168.1.5`，而你的是`192.168.20.12`，就要替换上面文本中的`192.168.1.5`为`192.168.20.12`。可以使用Ctrl+F搜索/替换。
 
     实际你需要修改的就是**oneapi块**里、**environment**的sql和redis的ip：
 
