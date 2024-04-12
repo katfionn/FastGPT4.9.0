@@ -23,9 +23,9 @@ weight: 501
   - [安装Redis](#二安装redis)
   - [安装OneAPI软件主体](#安装oneapi)
     
-- 安装Ollama
-  - 选择AI模型
-  - 安装Ollama并载入模型
+- [安装Ollama](#安装ollama)
+  - [选择AI模型](#选择ai模型)
+  - [安装Ollama并载入模型](#安装ollama并载入模型)
 
 - 参数配置与调整
   - ollama与OneAPI联调
@@ -211,6 +211,10 @@ weight: 501
 
 ![image](https://github.com/katfionn/FastGPT/assets/136874302/063d9923-3b97-49d3-9963-fd49ed4cd26f)
 
+
+------
+
+
 # 安装M3E向量模型
 
 1. 根据实际情况选择下面任一命令，通过容器安装，先拷贝好安装命令
@@ -262,6 +266,10 @@ http://192.168.1.5:6008
 ```shell
 aaabbbcccdddeeefffggghhhiiijjjkkk
 ```
+
+
+------
+
 
 # 安装OneAPI
 
@@ -367,6 +375,42 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
    ```
    123456
    ```
+
+
+------
+
+
+# 安装Ollama
+
+## 一、选择AI大模型
+
+1. 打开ollama模型库的[官方地址](https://ollama.com/library "ollama模型库")
+2. 找到想要的模型，例如我是[openchat](https://ollama.com/library/openchat)，复制这个模型的运行指令：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/44741067-0933-4e9e-b5d1-a0b77536f09b)
+   <a id="ol.1.2"></a>
+   ```shell
+   ollama run openchat:7b-v3.5-1210-q6_K
+   ```
+> 在第一步，我们需要记录下： ((20240324203615-7i0ecdi "*"))
+>  
+> * 运行ollama里的模型指令：ollama run openchat:7b-v3.5-1210-q6_K
+> * 模型运行指令中，“run”后面的一串文字：openchat:7b-v3.5-1210-q6_K
+
+## 二、安装Ollama并载入模型
+
+1. 在1panel的应用商店，根据图中指引找到Ollama，点击安装
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/d01ad58f-e6ab-4663-b939-ff77c89b8955)
+2. 在弹出的窗口中，勾选“端口外部访问”，然后点击右下角的“确定”
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/56111482-e8d7-47c5-946b-3f6756ef7a6c)
+3. 然后可在“应用商店-已安装”界面查看，看到下图内容，即安装完成
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/6eb3352e-74f6-41e4-9643-9fa1b0f9e351)
+4. 在1panel的容器界面，找到ollama的容器，并打开它的终端：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/ca4b5c53-2fb9-4e65-9fb8-80855b2c09f9)
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/038ab289-4156-406d-9fae-7d04e907f7d3)
+5. 在终端，把第一步复制的[模型运行指令](#ol.1.2)粘贴到终端并按下回车，静待完成
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/696100bf-c20d-4916-b008-2c3539d6d541)
+6. 点击左上角“返回”，退出终端界面，到这里ollama安装完成了。
+> 后续小伙伴想加模型的，可以重复第一步与第二步第5点操作。
 
 
 
