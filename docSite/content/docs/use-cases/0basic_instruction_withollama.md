@@ -55,7 +55,7 @@ weight: 501
 - 主机：基于Vmware的Linux虚拟机、网卡选择了“桥接模式：直接连接物理网络”(不勾选“直接复制物理网络连接状态)
 - Linux配置：30G运存、100G硬盘、32核心CPU、无显卡
 - 宿主机IP：192.168.1.2
-- 虚拟机IP：192.168.1.5
+- 虚拟机IP：192.168.1.3
 - Linux 普通用户：banana
 - Linux 普通用户密码：ABCD1234
 - Linux root 用户密码：Abc123456
@@ -193,9 +193,9 @@ weight: 501
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/11767a66-8b99-484e-8fdd-ac3e5dafc0e0)
 5. 等待容器重启，fastgpt此处的端口号不一定会同步显示，：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/70860510-c0bc-4ba2-b8cd-5d2e5aab669a)
-6. 测试端口是否正常：打开浏览器新标签，输入你虚拟机的IP+端口，尝试访问fastgpt。如：我IP是192.168.1.5，端口是3020，那么我就在浏览器的地址栏输入：
+6. 测试端口是否正常：打开浏览器新标签，输入你虚拟机的IP+端口，尝试访问fastgpt。如：我IP是192.168.1.3，端口是3020，那么我就在浏览器的地址栏输入：
    ```
-   192.168.1.5:3020
+   192.168.1.3:3020
    ```
 7. 看到下图界面，说明配置成功了:
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/f3de37ff-a36c-4b89-9966-e81326b9ed90)
@@ -248,20 +248,20 @@ weight: 501
 ### 记录关键信息
 
 
-* M3E模型的名字
+* M3E模型的名字<a id="me.2.1"></a>
 
 ```shell
 m3e
 ```
 
-* M3E模型的Base_Url
-  其中**192.168.1.5**是我的IP，可以替换成你自己的
+* M3E模型的Base_Url<a id="me.2.2"></a>
+  其中**192.168.1.3**是我的IP，可以替换成你自己的
 
 ```shell
-http://192.168.1.5:6008
+http://192.168.1.3:6008
 ```
 
-* M3E模型的密钥（默认）
+* M3E模型的密钥（默认）<a id="me.2.3"></a>
 
 ```shell
 aaabbbcccdddeeefffggghhhiiijjjkkk
@@ -327,8 +327,8 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
           - ./data/oneapi:/data
           - ./logs:/app/logs
         environment:
-          - SQL_DSN=oneapi:123456@tcp(192.168.1.5:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
-          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.5:6379)//redis
+          - SQL_DSN=oneapi:123456@tcp(192.168.1.3:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
+          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.3:6379)//redis
           - SESSION_SECRET=random_string  # 修改为随机字符串
           - TZ=Asia/Shanghai
     #      - NODE_TYPE=slave  # 多机部署时从节点取消注释该行
@@ -341,13 +341,13 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
           retries: 3
     ```
 
-    可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是`192.168.1.5`，而你的是`192.168.20.12`，就要替换上面文本中的`192.168.1.5`为`192.168.20.12`。可以使用Ctrl+F搜索/替换。
+    可以直接复制以上内容 → 在alist打开你的yml文件 → 在alist上方选择编辑文件 → 键盘上同时按下Ctrl+A → 键盘上同时按下Ctrl+V → 点击左下角的保存，记得修改对应`安装环境`，如我的虚拟机ip是`192.168.1.3`，而你的是`192.168.20.12`，就要替换上面文本中的`192.168.1.3`为`192.168.20.12`。可以使用Ctrl+F搜索/替换。
 
     实际你需要修改的就是**oneapi块**里、**environment**的sql和redis的ip：
 
     ```yml
-          - SQL_DSN=oneapi:123456@tcp(192.168.1.5:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
-          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.5:6379)//redis
+          - SQL_DSN=oneapi:123456@tcp(192.168.1.3:3306)/one-api  # 修改此行，或注释掉以使用 SQLite 作为数据库
+          - REDIS_CONN_STRING=root:abc123@tcp(192.168.1.3:6379)//redis
     ```
 3. 在1panel的“((20240319225622-04s2hbe "主机-终端"))”界面，粘贴下列指令到终端中并回车，拉取镜像
 
@@ -363,7 +363,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
     等命令行运行完、再次出现输入提示，就可以在1panel的容器界面看到这个容器正常运行了
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/b3580425-bde3-4022-880c-5752a11b48a5)
-5. 浏览器中输入地址<a id="oa.3.5.1"></a>`http://192.168.1.5:3000`验证一下是否可以正常访问
+5. 浏览器中输入地址<a id="oa.3.5.1"></a>`http://192.168.1.3:3000`验证一下是否可以正常访问
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/7c72b06e-1f05-4fe9-a8d7-962e2bb3eca0)
    出现上图界面，代表oneapi已安装完成，可使用默认账号密码<a id="oa.3.5.2"></a>登录：
    
@@ -391,7 +391,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
    ```shell
    ollama run openchat:7b-v3.5-1210-q6_K
    ```
-> 在第一步，我们需要记录下： ((20240324203615-7i0ecdi "*"))
+> <a id="ol.1.3"></a>在第一步，我们需要记录下：
 >  
 > * 运行ollama里的模型指令：ollama run openchat:7b-v3.5-1210-q6_K
 > * 模型运行指令中，“run”后面的一串文字：openchat:7b-v3.5-1210-q6_K
@@ -422,7 +422,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 - [OneAPI后台地址](#oa.3.5.1):
   ```
-  http://192.168.1.5:3000
+  http://192.168.1.3:3000
   ```
 - [OneAPI后台账号密码](#oa.3.5.2)
   ```
@@ -431,6 +431,110 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
   ```
 - [Ollama端口：11343](#ol.2.2)
 - Ollama官方主动适配了OpenAI的api格式，所以他的api地址是：
+  ```
+  http://192.168.1.3:11343
+  ```
+- Ollama的api没有apikey，直接使用“ollama”当作apikey
+- [Ollama模型是](#ol.1.3)：
+  ```
+  openchat:7b-v3.5-1210-q6_K
+  ```
+- [M3E模型名字](#me.2.1)
+  ```
+  m3e
+  ```
+- [M3E模型Base_Url](#me.2.2)
+  ```
+  http://192.168.1.3:6008
+  ```
+- [M3E模型的密钥](#me.2.3)
+  ```
+  aaabbbcccdddeeefffggghhhiiijjjkkk
+  ```
+
+## 一、Ollama与OneAPI联调
+
+1. 登录OneAPI后台，在渠道页面点击新增渠道
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/339ce1dc-7c09-459d-9624-c85e26cc99f7)
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/2cb8423e-a1cb-45a8-84a4-b686912947f0)
+2. 在“新增渠道”页面、按下图指引填写ollama的模型参数，然后点击左下角绿色按钮“提交”
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/36f3d55f-9e1e-4ac6-a582-cda18b9576ce)
+3. 测试渠道：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/8031c80b-84ff-47de-952e-d78f95cf8176)
+
+## 二、在OneAPI平台添加M3E模型
+
+1. 登录OneAPI后台，在渠道页面点击新增渠道，这次渠道要选择“自定义渠道”，如图：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/e8c7f452-0c58-4b11-8400-ad463e001551)
+2. M3E模型的渠道提交完，不用测试
+
+## 三、为fastGPT的config.json文件写入OneAPI配置
+
+1. 登录OneAPI后台，在令牌页面添加新的令牌
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/dbc51fd1-f6a3-446a-8a54-706f19687656)
+2. 按下图示例填写并提交创建令牌
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/c5f9543e-b159-4632-a016-18a856ee9d41)
+3. 在令牌列表，点击“复制”，然后根据提示复制令牌
+4. 在alist中，打开“/home/banana/fastgpt”这个目录
+5. 打开“docker-compose.yml”文件，并进入编辑模式
+6. 找到下面两行，可以用Ctrl+F在编辑器中搜索关键词
+   ```
+   - OPENAI_BASE_URL=https://api.openai.com/v1
+   - CHAT_API_KEY=sk-xxxx
+   ```
+   修改为下面内容，然后点击左下角的“保存”：
+   ```
+   - OPENAI_BASE_URL=http://192.168.1.3:3000/v1
+   - CHAT_API_KEY=sk-tL5Kefe3nKCN0xzt3434Ec761e3a4f8cB3392e581873299f
+   ```
+   其中，“http://192.168.1.3:3000/”是OneAPI的地址，下一行的KEY，是刚才第3步复制的令牌。
+7. 点击上面的路径，快捷返回文件目录
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/b586bbf1-4a69-40cb-bae3-a2af64bb41c0)
+8. 打开同一个目录下的“config.json”文件，进入编辑模式
+9. 用Ctrl+F搜索关键词“vectorModels”，找到对应内容块
+10. 在“vectorModels”这行末尾的`[`后面按一下回车换行
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/84d7d509-a5f7-4a04-8993-5245714a3e7d)
+11. 复制以下内容，在上一步的新行里，直接粘贴（Ctrl+V）
+    ```
+    {
+      "model": "m3e",
+      "name": "m3e",
+      "price": 0.1,
+      "defaultToken": 500,
+      "maxToken": 1800
+    },
+    ```
+12. 在文档开头`llmModels`这里，按图片指引在这行末尾增加新行：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/6c232539-61ef-454e-ac31-1b2882c844ee)
+13. 复制以下内容，在上一步的新行里，直接粘贴（Ctrl+V），最后点击左下角的“保存”
+   ```
+   {
+      "model": "openchat:7b-v3.5-1210-q6_K",
+      "name": "openchat:7b-v3.5-1210-q6_K",
+      "maxContext": 128000,
+      "maxResponse": 4000,
+      "quoteMaxToken": 100000,
+      "maxTemperature": 1.2,
+      "charsPointsPrice": 0,
+      "censor": false,
+      "vision": true,
+      "datasetProcess": true,
+      "usedInClassify": true,
+      "usedInExtractFields": true,
+      "usedInToolCall": false,
+      "usedInQueryExtension": false,
+      "toolChoice": true,
+      "functionCall": false,
+      "customCQPrompt": "",
+      "customExtractPrompt": "",
+      "defaultSystemChatPrompt": "",
+      "defaultConfig": {}
+    },
+   ```
+
+
+
+
 
 
 
