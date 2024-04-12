@@ -24,8 +24,8 @@ weight: 501
   - [安装OneAPI软件主体](#安装oneapi)
     
 - [安装Ollama](#安装ollama)
-  - [选择AI模型](#选择ai模型)
-  - [安装Ollama并载入模型](#安装ollama并载入模型)
+  - [选择AI模型](#一选择ai模型)
+  - [安装Ollama并载入模型](#二安装ollama并载入模型)
 
 - 参数配置与调整
   - ollama与OneAPI联调
