@@ -420,7 +420,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 开始之前，回顾下此前记录的信息：
 
-- [OneAPI后台地址](#os.3.5.1):
+- [OneAPI后台地址](#oa.3.5.1):
   ```
   http://192.168.1.5:3000
   ```
