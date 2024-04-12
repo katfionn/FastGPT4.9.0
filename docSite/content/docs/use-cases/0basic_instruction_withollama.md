@@ -19,9 +19,9 @@ weight: 501
 - [安装M3E向量模型](#安装M3E向量模型)
 
 - [安装OneAPI](#安装OneAPI)
-  - 安装mySQL
-  - 安装Redis
-  - 安装OneAPI软件主体
+  - [安装mySQL](#一、安装mySQL)
+  - [安装Redis](#二、安装Redis)
+  - [安装OneAPI软件主体](#安装OneAPI软件主体)
     
 - 安装Ollama
   - 选择AI模型
