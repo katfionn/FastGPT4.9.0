@@ -363,9 +363,9 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
     等命令行运行完、再次出现输入提示，就可以在1panel的容器界面看到这个容器正常运行了
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/b3580425-bde3-4022-880c-5752a11b48a5)
-5. 浏览器中输入地址“http://192.168.1.5:3000”验证一下是否可以正常访问
+5. <a id="oa.3.5.1"></a>浏览器中输入地址“http://192.168.1.5:3000”验证一下是否可以正常访问
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/7c72b06e-1f05-4fe9-a8d7-962e2bb3eca0)
-   出现上图界面，代表oneapi已安装完成，可使用默认账号密码登录：
+   出现上图界面，代表oneapi已安装完成，可使用默认账号密码<a id="oa.3.5.2"></a>登录：
    
    账号
    ```
@@ -401,7 +401,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 1. 在1panel的应用商店，根据图中指引找到Ollama，点击安装
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/d01ad58f-e6ab-4663-b939-ff77c89b8955)
 2. 在弹出的窗口中，勾选“端口外部访问”，然后点击右下角的“确定”
-   ![image](https://github.com/katfionn/FastGPT/assets/136874302/56111482-e8d7-47c5-946b-3f6756ef7a6c)
+   <a id="ol.2.2"></a>![image](https://github.com/katfionn/FastGPT/assets/136874302/56111482-e8d7-47c5-946b-3f6756ef7a6c)
 3. 然后可在“应用商店-已安装”界面查看，看到下图内容，即安装完成
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/6eb3352e-74f6-41e4-9643-9fa1b0f9e351)
 4. 在1panel的容器界面，找到ollama的容器，并打开它的终端：
@@ -412,6 +412,25 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 6. 点击左上角“返回”，退出终端界面，到这里ollama安装完成了。
 > 后续小伙伴想加模型的，可以重复第一步与第二步第5点操作。
 
+
+------
+
+
+# 参数配置与调整<a id="oa.3.5"></a>
+
+开始之前，回顾下此前记录的信息：
+
+- [OneAPI后台地址](#os.3.5.1):
+  ```
+  http://192.168.1.5:3000
+  ```
+- [OneAPI后台账号密码](#oa.3.5.2)
+  ```
+  账号：root
+  密码：123456
+  ```
+- [Ollama端口：11343](#ol.2.2)
+- Ollama官方主动适配了OpenAI的api格式，所以他的api地址是：
 
 
 
