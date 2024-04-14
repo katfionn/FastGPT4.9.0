@@ -97,6 +97,8 @@ weight: 501
 
 [https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json](https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json)
 
+        ---
+
 ## 二、执行安装
 
 1. 登陆alist，在“/home/banana”目录下建立“fastgpt”目录
