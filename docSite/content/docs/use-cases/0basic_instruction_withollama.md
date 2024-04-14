@@ -97,8 +97,8 @@ weight: 501
 
 [https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json](https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json)
 
-   ---
-   ---
+   ------
+   
 
 ## 二、执行安装
 
