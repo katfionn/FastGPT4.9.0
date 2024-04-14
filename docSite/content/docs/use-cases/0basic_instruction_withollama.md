@@ -97,7 +97,7 @@ weight: 501
 
 [https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json](https://github.com/labring/FastGPT/blob/main/projects/app/data/config.json)
 
-   ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 二、执行安装
 
@@ -155,6 +155,8 @@ weight: 501
      ![image](https://github.com/katfionn/FastGPT/assets/136874302/4072e96b-0e13-4fa8-b6ca-c660d8e78e0c)
 17. 到这，FastGPT的软件主体就安装完成了，接下来进行数据初始化操作。
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ## 三、初始化 Mongo 副本集
 
 1. 在1panel中，进入容器列表，找到mongo容器，点击操作列的“终端”按钮
@@ -193,6 +195,8 @@ weight: 501
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/d6597749-5edc-4ab4-83b5-71718805ebe0)
 8. 初始化数据完成
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ## 四、修改fastgpt端口
 
 1. 由于不知名的原因，安装完容器后，在环境变量里会多出一个“配置端口”的参数，这里也需要改成3020，和[前面](#ft.2.3)保持一致。在容器界面找到fastgpt
@@ -214,6 +218,8 @@ weight: 501
    ```
 7. 看到下图界面，说明配置成功了:
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/f3de37ff-a36c-4b89-9966-e81326b9ed90)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 五、登录后台，验证FastGPT是否安装成功
 
@@ -310,7 +316,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
    新建成功后，会出现以下界面：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/938865d1-4d88-4cad-865f-f5e734edd992)
    
-
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## 二、安装redis
 
 1. 进入1panel后台，找到应用商店的“全部 - 数据库”分类，找到Redis并点击“安装”：
@@ -323,6 +329,8 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
    用户(默认)：root
    密码：abc123
    端口：6379
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 三、安装OneAPI
 
@@ -414,6 +422,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 > * 运行ollama里的模型指令：ollama run openchat:7b-v3.5-1210-q6_K
 > * 模型运行指令中，“run”后面的一串文字：openchat:7b-v3.5-1210-q6_K
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 ## 二、安装Ollama并载入模型
 
 1. 在1panel的应用商店，根据图中指引找到Ollama，点击安装
@@ -481,11 +490,15 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 3. 测试渠道：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/8031c80b-84ff-47de-952e-d78f95cf8176)
 
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
 ## 二、在OneAPI平台添加M3E模型
 
 1. 登录OneAPI后台，在渠道页面点击新增渠道，这次渠道要选择“自定义渠道”，如图：
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/e8c7f452-0c58-4b11-8400-ad463e001551)
 2. M3E模型的渠道提交完，不用测试
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 三、在fastGPT的config中添加OneAPI相关配置
 
@@ -574,6 +587,8 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/e7e489ec-7623-44fd-b568-a66ec8d63986)
 20. 修改完后点击右下角“确认”、点击弹窗中的“确认”
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/8fced034-48f2-420a-bd12-9f897a0c6473)
+
+━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
 ## 四、测试结果
 
