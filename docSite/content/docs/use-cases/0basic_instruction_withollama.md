@@ -41,6 +41,7 @@ weight: 501
   - [ollama与OneAPI联调](#一ollama与oneapi联调)
   - [在OneAPI平台添加M3E模型](#二在oneapi平台添加m3e模型)
   - [在fastGPT的config中添加OneAPI相关配置](#三在fastgpt的config中添加oneapi相关配置)
+  - [测试结果](#四测试结果)
 
 > 安装清单没有顺序要求，但阅读教程时建议由上到下阅读。
 
@@ -572,7 +573,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 20. 修改完后点击右下角“确认”、点击弹窗中的“确认”
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/8fced034-48f2-420a-bd12-9f897a0c6473)
 
-## 测试结果
+## 四、测试结果
 
 1. 在浏览器输入下面的地址，打开fastgpt
    ```
