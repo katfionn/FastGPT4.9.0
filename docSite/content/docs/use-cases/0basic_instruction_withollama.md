@@ -22,9 +22,9 @@ weight: 501
 
 - [安装FastGPT](#安装FastGPT)
 
-  - 安装fastgpt 软件主体
-  - 初始化 Mongo 副本集
-  - 调整端口
+  - [安装fastgpt 软件主体](#二执行安装)
+  - [初始化 Mongo 副本集](#三初始化-mongo-副本集)
+  - [调整端口](#四修改fastgpt端口)
 
 - [安装M3E向量模型](#安装M3E向量模型)
 
