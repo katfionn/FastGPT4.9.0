@@ -76,8 +76,9 @@ weight: 501
 
 
 # 安装FastGPT
-
 [返回安装清单](#安装清单)
+
+---
 
 ## 一、获取docker-compose与config文件 ((20240319224308-3luzywh "*"))
 
