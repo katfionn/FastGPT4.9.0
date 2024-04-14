@@ -568,13 +568,14 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/a84671f4-863b-4795-9667-8bef47ff7c23)
      1. 上图只是说明m3e可以配置了，接下来看m3e可否正常地向量化我们的输入的内容
      2. 接下来通过手动录入知识库内容，随便一个百度百科都可以，然后只要能录入成功，就说明M3E模型配置完成了
-
-
-
-
-
-
-
+4. 接下来创建应用、引入知识库，测试ollama的模型是否正常运行：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/2933f05e-c536-48f9-9dd5-18928fd7a3e5)
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/9b1acced-ddb1-45f6-8f43-b8767b250e16)
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/ccad250c-1d5f-47a0-967b-5c4f42f71826)
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/c8bfc7b9-78d3-4af6-9f7a-3ed447bc62b3)
+     - 我在知识库引入了果壳的一篇关于“易搜站”的文章，下面是测试结果：
+        ![image](https://github.com/katfionn/FastGPT/assets/136874302/4fb1ae79-be40-42f3-90f7-430ab31409de)
+   > 注意，在4.6.9版本，建立应用的时候，需要先点一次“保存并预览”，然后再更改你的“AI模型”，这样你更改的才有效，不然他会按默认的“gpt3.5”的请求方式去请求OneAPI，这样会直接提示“XXX默认分组没有可用渠道XXX”。
 
 
 
