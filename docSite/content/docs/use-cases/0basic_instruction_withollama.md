@@ -532,6 +532,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
     },
    ```
    其中，第一行的“model”和第二行的“name”都是此前在ollama下载的模型名称
+   
 14. 在1panel中容器列表，找到fastgpt容器，删除它
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f8a69630-e3c0-4171-b819-a774ef045b64)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/1effb2f3-bf9e-42af-931e-6b51b32ba759)
