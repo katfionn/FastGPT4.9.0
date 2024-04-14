@@ -38,9 +38,9 @@ weight: 501
   - [安装Ollama并载入模型](#二安装ollama并载入模型)
 
 - 参数配置与调整
-  - ollama与OneAPI联调
-  - 在OneAPI平台添加M3E模型
-  - OneAPI适配fastGPT的config配置
+  - [ollama与OneAPI联调](#一ollama与oneapi联调)
+  - [在OneAPI平台添加M3E模型](#二在oneapi平台添加m3e模型)
+  - [在fastGPT的config中添加OneAPI相关配置](#三在fastgpt的config中添加oneapi相关配置)
 
 > 安装清单没有顺序要求，但阅读教程时建议由上到下阅读。
 
@@ -285,6 +285,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 
 # 安装OneAPI
+[返回安装清单](#安装清单)
 
 > * OneAPI的docker文件官方地址：https://github.com/songquanpeng/one-api/blob/main/docker-compose.yml ((20240321012024-wj66rwb "*"))
 > * 鉴于多次尝试，用官方文件直接安装基于容器的oneapi时，都会卡在mysql用不了的情况(个人有这需求)；所以最终解决办法是：先手动安装好mysql、手动建好与官方配置里一模一样的数据库，然后再安装oneapi。
@@ -394,6 +395,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 
 # 安装Ollama
+[返回安装清单](#安装清单)
 
 ## 一、选择AI模型
 
@@ -430,6 +432,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 
 # 参数配置与调整
+[返回安装清单](#安装清单)
 
 开始之前，回顾下此前记录的信息：
 
@@ -481,7 +484,7 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/e8c7f452-0c58-4b11-8400-ad463e001551)
 2. M3E模型的渠道提交完，不用测试
 
-## 三、为fastGPT的config.json文件写入OneAPI配置
+## 三、在fastGPT的config中添加OneAPI相关配置
 
 1. 登录OneAPI后台，在令牌页面添加新的令牌
    ![image](https://github.com/katfionn/FastGPT/assets/136874302/dbc51fd1-f6a3-446a-8a54-706f19687656)
