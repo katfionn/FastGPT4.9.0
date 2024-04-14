@@ -107,7 +107,7 @@ weight: 501
 7. 删除oneapi相关内容，后面单独配置，在文档最下面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/cd6122d0-1131-4e10-9661-aa6bea606877)
 8. 点击左下角“保存” 然后返回上一个页面
-9. 在1panel中，按以下步骤打开终端界面
+9. <a id="ft.2.9"></a>在1panel中，按以下步骤打开终端界面
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f10bcf17-6dea-458d-9196-8ddd60e871fd)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f139cce7-c240-46ce-9f54-be19720970ae)
 
@@ -537,7 +537,40 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/f8a69630-e3c0-4171-b819-a774ef045b64)
     ![image](https://github.com/katfionn/FastGPT/assets/136874302/1effb2f3-bf9e-42af-931e-6b51b32ba759)
 15. 在1panel中，进入主机的终端机界面
-   
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/9c6ddbcf-f171-40a5-a84c-8222e75af615)
+16. 如果当前不是root用户，输入“su”、输入root用户账号密码进入root模式，具体参考[这里](#ft.2.9)
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/ed564f02-fd93-4387-a081-9116594daa2a)
+17. 进入fastgpt目录
+    ```
+    cd fastgpt
+    ```
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/5827321c-c73b-492b-ac3b-7c9484f052dc)
+18. 输入下面指令，重建容器：
+    ```
+    docker-compose up -d
+    ```
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/b4ee6470-5d35-4435-8d16-1d0b315f2d72)
+19. 在1panel的容器界面，修改fastgpt容器的环境变量
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/fee5f05b-f293-417c-837b-928ea48a6d6b)
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/e7e489ec-7623-44fd-b568-a66ec8d63986)
+20. 修改完后点击右下角“确认”、点击弹窗中的“确认”
+    ![image](https://github.com/katfionn/FastGPT/assets/136874302/8fced034-48f2-420a-bd12-9f897a0c6473)
+
+## 测试结果
+
+1. 在浏览器输入下面的地址，打开fastgpt
+   ```
+   http://192.168.1.3:3020
+   ```
+2. 点击左边菜单栏中的知识库：
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/78d17cf0-b4bf-48d4-b086-8af1460a2bcd)
+3. 建立知识库
+   ![image](https://github.com/katfionn/FastGPT/assets/136874302/a84671f4-863b-4795-9667-8bef47ff7c23)
+     1. 上图只是说明m3e可以配置了，接下来看m3e可否正常地向量化我们的输入的内容
+     2. 接下来通过手动录入知识库内容，随便一个百度百科都可以，然后只要能录入成功，就说明M3E模型配置完成了
+
+
+
 
 
 
