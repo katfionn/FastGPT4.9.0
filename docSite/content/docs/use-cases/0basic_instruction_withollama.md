@@ -80,7 +80,7 @@ weight: 501
 
 ---
 
-## 一、获取docker-compose与config文件 ((20240319224308-3luzywh "*"))
+## 一、获取docker-compose与config文件
 
 #### 获取docker-compose文件
 
@@ -240,6 +240,8 @@ weight: 501
 # 安装M3E向量模型
 [返回安装清单](#安装清单)
 
+---
+
 1. 根据实际情况选择下面任一命令，通过容器安装，先拷贝好安装命令
     1. 用CPU运行
        ```
@@ -296,6 +298,8 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 # 安装OneAPI
 [返回安装清单](#安装清单)
+
+---
 
 > * OneAPI的docker文件官方地址：https://github.com/songquanpeng/one-api/blob/main/docker-compose.yml ((20240321012024-wj66rwb "*"))
 > * 鉴于多次尝试，用官方文件直接安装基于容器的oneapi时，都会卡在mysql用不了的情况(个人有这需求)；所以最终解决办法是：先手动安装好mysql、手动建好与官方配置里一模一样的数据库，然后再安装oneapi。
@@ -409,6 +413,8 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 # 安装Ollama
 [返回安装清单](#安装清单)
 
+---
+
 ## 一、选择AI模型
 
 1. 打开ollama模型库的[官方地址](https://ollama.com/library "ollama模型库")
@@ -446,6 +452,8 @@ aaabbbcccdddeeefffggghhhiiijjjkkk
 
 # 参数配置与调整
 [返回安装清单](#安装清单)
+
+---
 
 开始之前，回顾下此前记录的信息：
 
