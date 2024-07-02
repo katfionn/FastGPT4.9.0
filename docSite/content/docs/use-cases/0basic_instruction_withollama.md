@@ -88,7 +88,7 @@ weight: 501
 
 [https://raw.githubusercontent.com/labring/FastGPT/main/files/deploy/fastgpt/docker-compose.yml](https://raw.githubusercontent.com/labring/FastGPT/main/files/deploy/fastgpt/docker-compose.yml)
 
-[https://github.com/labring/FastGPT/blob/main/files/deploy/fastgpt/docker-compose.yml](https://github.com/labring/FastGPT/blob/main/files/deploy/fastgpt/docker-compose.yml)
+[https://github.com/labring/FastGPT/blob/main/files/docker/docker-compose-pgvector.yml](https://github.com/labring/FastGPT/blob/main/files/docker/docker-compose-pgvector.yml)
 
 #### 获取config文件
 
