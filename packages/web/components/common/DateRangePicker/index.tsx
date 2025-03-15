@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { Box, Card, Flex, useTheme, useOutsideClick, Button } from '@chakra-ui/react';
 import { addDays, format } from 'date-fns';
 import { type DateRange, DayPicker } from 'react-day-picker';
@@ -14,18 +14,26 @@ const DateRangePicker = ({
   defaultDate = {
     from: addDays(new Date(), -30),
     to: new Date()
-  }
+  },
+  dateRange
 }: {
   onChange?: (date: DateRange) => void;
   onSuccess?: (date: DateRange) => void;
   position?: 'bottom' | 'top';
   defaultDate?: DateRange;
+  dateRange?: DateRange;
 }) => {
   const { t } = useTranslation();
   const theme = useTheme();
   const OutRangeRef = useRef(null);
   const [range, setRange] = useState<DateRange | undefined>(defaultDate);
   const [showSelected, setShowSelected] = useState(false);
+
+  useEffect(() => {
+    if (dateRange) {
+      setRange(dateRange);
+    }
+  }, [dateRange]);
 
   const formatSelected = useMemo(() => {
     if (range?.from && range.to) {
@@ -49,11 +57,13 @@ const DateRangePicker = ({
         py={1}
         borderRadius={'sm'}
         cursor={'pointer'}
-        bg={'myWhite.600'}
+        bg={'myGray.50'}
         fontSize={'sm'}
         onClick={() => setShowSelected(true)}
       >
-        <Box>{formatSelected}</Box>
+        <Box color={'myGray.600'} fontWeight={'400'}>
+          {formatSelected}
+        </Box>
         <MyIcon ml={2} name={'date'} w={'16px'} color={'myGray.600'} />
       </Flex>
       {showSelected && (
@@ -90,8 +100,15 @@ const DateRangePicker = ({
               if (date?.to === undefined) {
                 date.to = date.from;
               }
+
+              if (date?.from) {
+                date.from = new Date(date.from.setHours(0, 0, 0, 0));
+              }
+              if (date?.to) {
+                date.to = new Date(date.to.setHours(23, 59, 59, 999));
+              }
               setRange(date);
-              onChange && onChange(date);
+              onChange?.(date);
             }}
             footer={
               <Flex justifyContent={'flex-end'}>
@@ -101,16 +118,16 @@ const DateRangePicker = ({
                   mr={2}
                   onClick={() => setShowSelected(false)}
                 >
-                  {t('common.Close')}
+                  {t('common:common.Close')}
                 </Button>
                 <Button
                   size={'sm'}
                   onClick={() => {
-                    onSuccess && onSuccess(range || defaultDate);
+                    onSuccess?.(range || defaultDate);
                     setShowSelected(false);
                   }}
                 >
-                  {t('common.Confirm')}
+                  {t('common:common.Confirm')}
                 </Button>
               </Flex>
             }

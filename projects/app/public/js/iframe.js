@@ -23,9 +23,8 @@ function embedChatbot() {
   const ChatBtn = document.createElement('div');
   ChatBtn.id = chatBtnId;
   ChatBtn.style.cssText =
-    'position: fixed; bottom: 1rem; right: 1rem; width: 40px; height: 40px; cursor: pointer; z-index: 2147483647; transition: 0;';
+    'position: fixed; bottom: 30px; right: 60px; width: 40px; height: 40px; cursor: pointer; z-index: 2147483647; transition: 0;';
 
-  // btn icon
   const ChatBtnDiv = document.createElement('img');
   ChatBtnDiv.src = defaultOpen ? CloseIcon : MessageIcon;
   ChatBtnDiv.setAttribute('width', '100%');
@@ -33,21 +32,63 @@ function embedChatbot() {
   ChatBtnDiv.draggable = false;
 
   const iframe = document.createElement('iframe');
-  iframe.allow = 'fullscreen;microphone';
+  iframe.allow = '*';
   iframe.referrerPolicy = 'no-referrer';
   iframe.title = 'FastGPT Chat Window';
   iframe.id = chatWindowId;
   iframe.src = botSrc;
   iframe.style.cssText =
-    'border: none; position: fixed; flex-direction: column; justify-content: space-between; box-shadow: rgba(150, 150, 150, 0.2) 0px 10px 30px 0px, rgba(150, 150, 150, 0.2) 0px 0px 0px 1px; bottom: 4rem; right: 1rem; width: 24rem; height: 40rem; max-width: 90vw; max-height: 85vh; border-radius: 0.75rem; display: flex; z-index: 2147483647; overflow: hidden; left: unset; background-color: #F3F4F6;';
+    'border: none; position: fixed; flex-direction: column; justify-content: space-between; box-shadow: rgba(150, 150, 150, 0.2) 0px 10px 30px 0px, rgba(150, 150, 150, 0.2) 0px 0px 0px 1px; width: 375px; height: 667px; max-width: 90vw; max-height: 85vh; border-radius: 0.75rem; display: flex; z-index: 2147483647; overflow: hidden; left: unset; background-color: #F3F4F6;';
   iframe.style.visibility = defaultOpen ? 'unset' : 'hidden';
 
   document.body.appendChild(iframe);
+
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.type === 'attributes' && mutation.attributeName === 'data-bot-src') {
+        const newBotSrc = script.getAttribute('data-bot-src');
+        if (newBotSrc) {
+          iframe.src = newBotSrc;
+        }
+      }
+    });
+  });
+  observer.observe(script, {
+    attributes: true,
+    attributeFilter: ['data-bot-src']
+  });
 
   let chatBtnDragged = false;
   let chatBtnDown = false;
   let chatBtnMouseX;
   let chatBtnMouseY;
+
+  const updateChatWindowPosition = () => {
+    const chatWindow = document.getElementById(chatWindowId);
+    const btn = ChatBtn.getBoundingClientRect();
+    const [vw, vh, ww, wh] = [
+      window.innerWidth,
+      window.innerHeight,
+      chatWindow.offsetWidth,
+      chatWindow.offsetHeight
+    ];
+
+    let right = 0;
+    if (btn.left >= ww) {
+      right = vw - btn.left + 10; // 左侧有空间则放在左侧，间距 10
+    } else if (vw - btn.right >= ww) {
+      right = vw - btn.right - ww - 10; // 右侧有空间则放在右侧
+    }
+
+    let bottom = Math.max(30, vh - btn.bottom); // 聊天窗口底部和按钮对齐，最少 30
+    if (btn.top < wh) {
+      bottom = Math.min(bottom, vh - wh - 30); // 确保聊天窗口不超出顶部
+    }
+
+    chatWindow.style.right = `${right}px`;
+    chatWindow.style.bottom = `${bottom}px`;
+  };
+
   ChatBtn.addEventListener('click', function () {
     if (chatBtnDragged) {
       chatBtnDragged = false;
@@ -68,34 +109,41 @@ function embedChatbot() {
 
   ChatBtn.addEventListener('mousedown', (e) => {
     e.stopPropagation();
-
-    if (!chatBtnMouseX && !chatBtnMouseY) {
-      chatBtnMouseX = e.clientX;
-      chatBtnMouseY = e.clientY;
-    }
-
+    chatBtnMouseX = e.clientX;
+    chatBtnMouseY = e.clientY;
     chatBtnDown = true;
+
+    ChatBtn.initialRight = parseInt(ChatBtn.style.right) || 60;
+    ChatBtn.initialBottom = parseInt(ChatBtn.style.bottom) || 30;
   });
-  ChatBtn.addEventListener('mousemove', (e) => {
+
+  window.addEventListener('mousemove', (e) => {
     e.stopPropagation();
     if (!canDrag || !chatBtnDown) return;
 
     chatBtnDragged = true;
-    const transformX = e.clientX - chatBtnMouseX;
-    const transformY = e.clientY - chatBtnMouseY;
 
-    ChatBtn.style.transform = `translate3d(${transformX}px, ${transformY}px, 0)`;
+    const deltaX = e.clientX - chatBtnMouseX;
+    const deltaY = e.clientY - chatBtnMouseY;
+
+    let newRight = ChatBtn.initialRight - deltaX;
+    let newBottom = ChatBtn.initialBottom - deltaY;
+
+    newRight = Math.max(20, Math.min(window.innerWidth - 60, newRight));
+    newBottom = Math.max(30, Math.min(window.innerHeight - 70, newBottom));
+
+    ChatBtn.style.right = `${newRight}px`;
+    ChatBtn.style.bottom = `${newBottom}px`;
+
+    updateChatWindowPosition();
   });
-  ChatBtn.addEventListener('mouseup', (e) => {
-    chatBtnDragged = false;
-    chatBtnDown = false;
-  });
+
   window.addEventListener('mouseup', (e) => {
-    chatBtnDragged = false;
     chatBtnDown = false;
   });
 
   ChatBtn.appendChild(ChatBtnDiv);
   document.body.appendChild(ChatBtn);
+  updateChatWindowPosition();
 }
 window.addEventListener('load', embedChatbot);

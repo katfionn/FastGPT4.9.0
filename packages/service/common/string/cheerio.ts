@@ -1,7 +1,8 @@
 import { UrlFetchParams, UrlFetchResponse } from '@fastgpt/global/common/file/api';
 import * as cheerio from 'cheerio';
 import axios from 'axios';
-import { htmlToMarkdown } from './markdown';
+import { htmlToMarkdown } from './utils';
+import { isInternalAddress } from '../system/utils';
 
 export const cheerioToHtml = ({
   fetchUrl,
@@ -14,12 +15,13 @@ export const cheerioToHtml = ({
 }) => {
   // get origin url
   const originUrl = new URL(fetchUrl).origin;
+  const protocol = new URL(fetchUrl).protocol; // http: or https:
 
   const usedSelector = selector || 'body';
   const selectDom = $(usedSelector);
 
   // remove i element
-  selectDom.find('i,script').remove();
+  selectDom.find('i,script,style').remove();
 
   // remove empty a element
   selectDom
@@ -32,14 +34,22 @@ export const cheerioToHtml = ({
   // if link,img startWith /, add origin url
   selectDom.find('a').each((i, el) => {
     const href = $(el).attr('href');
-    if (href && href.startsWith('/')) {
-      $(el).attr('href', originUrl + href);
+    if (href) {
+      if (href.startsWith('//')) {
+        $(el).attr('href', protocol + href);
+      } else if (href.startsWith('/')) {
+        $(el).attr('href', originUrl + href);
+      }
     }
   });
   selectDom.find('img').each((i, el) => {
     const src = $(el).attr('src');
-    if (src && src.startsWith('/')) {
-      $(el).attr('src', originUrl + src);
+    if (src) {
+      if (src.startsWith('//')) {
+        $(el).attr('src', protocol + src);
+      } else if (src.startsWith('/')) {
+        $(el).attr('src', originUrl + src);
+      }
     }
   });
 
@@ -66,6 +76,16 @@ export const urlsFetch = async ({
 
   const response = await Promise.all(
     urlList.map(async (url) => {
+      const isInternal = isInternalAddress(url);
+      if (isInternal) {
+        return {
+          url,
+          title: '',
+          content: 'Cannot fetch internal url',
+          selector: ''
+        };
+      }
+
       try {
         const fetchRes = await axios.get(url, {
           timeout: 30000
@@ -77,6 +97,7 @@ export const urlsFetch = async ({
           $,
           selector
         });
+
         const md = await htmlToMarkdown(html);
 
         return {
@@ -100,3 +121,5 @@ export const urlsFetch = async ({
 
   return response;
 };
+
+export const loadContentByCheerio = async (content: string) => cheerio.load(content);

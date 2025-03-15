@@ -1,158 +1,146 @@
-import React, { useMemo } from 'react';
+import React, { useCallback, useMemo } from 'react';
 import ReactMarkdown from 'react-markdown';
 import 'katex/dist/katex.min.css';
-import RemarkMath from 'remark-math';
-import RemarkBreaks from 'remark-breaks';
-import RehypeKatex from 'rehype-katex';
-import RemarkGfm from 'remark-gfm';
+import RemarkMath from 'remark-math'; // Math syntax
+import RemarkBreaks from 'remark-breaks'; // Line break
+import RehypeKatex from 'rehype-katex'; // Math render
+import RemarkGfm from 'remark-gfm'; // Special markdown syntax
+import RehypeExternalLinks from 'rehype-external-links';
 
 import styles from './index.module.scss';
 import dynamic from 'next/dynamic';
 
-import { Link, Button } from '@chakra-ui/react';
-import MyTooltip from '../MyTooltip';
-import { useTranslation } from 'next-i18next';
-import { EventNameEnum, eventBus } from '@/web/common/utils/eventbus';
-import MyIcon from '@fastgpt/web/components/common/Icon';
-import { getFileAndOpen } from '@/web/core/dataset/utils';
-import { MARKDOWN_QUOTE_SIGN } from '@fastgpt/global/core/chat/constants';
+import { Box } from '@chakra-ui/react';
+import { CodeClassNameEnum, mdTextFormat } from './utils';
 
-const CodeLight = dynamic(() => import('./CodeLight'));
-const MermaidCodeBlock = dynamic(() => import('./img/MermaidCodeBlock'));
-const MdImage = dynamic(() => import('./img/Image'));
-const EChartsCodeBlock = dynamic(() => import('./img/EChartsCodeBlock'));
+const CodeLight = dynamic(() => import('./codeBlock/CodeLight'), { ssr: false });
+const MermaidCodeBlock = dynamic(() => import('./img/MermaidCodeBlock'), { ssr: false });
+const MdImage = dynamic(() => import('./img/Image'), { ssr: false });
+const EChartsCodeBlock = dynamic(() => import('./img/EChartsCodeBlock'), { ssr: false });
+const IframeCodeBlock = dynamic(() => import('./codeBlock/Iframe'), { ssr: false });
+const IframeHtmlCodeBlock = dynamic(() => import('./codeBlock/iframe-html'), { ssr: false });
+const VideoBlock = dynamic(() => import('./codeBlock/Video'), { ssr: false });
+const AudioBlock = dynamic(() => import('./codeBlock/Audio'), { ssr: false });
 
-const ChatGuide = dynamic(() => import('./chat/Guide'));
-const QuestionGuide = dynamic(() => import('./chat/QuestionGuide'));
+const ChatGuide = dynamic(() => import('./chat/Guide'), { ssr: false });
+const QuestionGuide = dynamic(() => import('./chat/QuestionGuide'), { ssr: false });
+const A = dynamic(() => import('./A'), { ssr: false });
 
-export enum CodeClassName {
-  guide = 'guide',
-  questionGuide = 'questionGuide',
-  mermaid = 'mermaid',
-  echarts = 'echarts',
-  quote = 'quote',
-  files = 'files'
-}
-
-const Markdown = ({
-  source = '',
-  isChatting = false
-}: {
+type Props = {
   source?: string;
-  isChatting?: boolean;
-}) => {
+  showAnimation?: boolean;
+  isDisabled?: boolean;
+  forbidZhFormat?: boolean;
+};
+const Markdown = (props: Props) => {
+  const source = props.source || '';
+
+  if (source.length < 200000) {
+    return <MarkdownRender {...props} />;
+  }
+
+  return <Box whiteSpace={'pre-wrap'}>{source}</Box>;
+};
+const MarkdownRender = ({ source = '', showAnimation, isDisabled, forbidZhFormat }: Props) => {
   const components = useMemo<any>(
     () => ({
       img: Image,
-      pre: 'div',
-      p: (pProps: any) => <p {...pProps} dir="auto" />,
+      pre: RewritePre,
       code: Code,
       a: A
     }),
     []
   );
 
-  const formatSource = source
-    .replace(/\\n/g, '\n&nbsp;')
-    .replace(/(http[s]?:\/\/[^\s，。]+)([。，])/g, '$1 $2')
-    .replace(/\n*(\[QUOTE SIGN\]\(.*\))/g, '$1');
+  const formatSource = useMemo(() => {
+    if (showAnimation || forbidZhFormat) return source;
+    return mdTextFormat(source);
+  }, [forbidZhFormat, showAnimation, source]);
+
+  const urlTransform = useCallback((val: string) => {
+    return val;
+  }, []);
 
   return (
-    <ReactMarkdown
-      className={`markdown ${styles.markdown}
-      ${isChatting ? `${formatSource ? styles.waitingAnimation : styles.animation}` : ''}
+    <Box position={'relative'}>
+      <ReactMarkdown
+        className={`markdown ${styles.markdown}
+      ${showAnimation ? `${formatSource ? styles.waitingAnimation : styles.animation}` : ''}
     `}
-      remarkPlugins={[RemarkMath, [RemarkGfm, { singleTilde: false }], RemarkBreaks]}
-      rehypePlugins={[RehypeKatex]}
-      components={components}
-      linkTarget={'_blank'}
-    >
-      {formatSource}
-    </ReactMarkdown>
+        remarkPlugins={[RemarkMath, [RemarkGfm, { singleTilde: false }], RemarkBreaks]}
+        rehypePlugins={[RehypeKatex, [RehypeExternalLinks, { target: '_blank' }]]}
+        components={components}
+        urlTransform={urlTransform}
+      >
+        {formatSource}
+      </ReactMarkdown>
+      {isDisabled && <Box position={'absolute'} top={0} right={0} left={0} bottom={0} />}
+    </Box>
   );
 };
 
 export default React.memo(Markdown);
 
-const Code = React.memo(function Code(e: any) {
-  const { inline, className, children } = e;
-
+/* Custom dom */
+function Code(e: any) {
+  const { className, codeBlock, children } = e;
   const match = /language-(\w+)/.exec(className || '');
   const codeType = match?.[1];
 
   const strChildren = String(children);
 
   const Component = useMemo(() => {
-    if (codeType === CodeClassName.mermaid) {
+    if (codeType === CodeClassNameEnum.mermaid) {
       return <MermaidCodeBlock code={strChildren} />;
     }
-
-    if (codeType === CodeClassName.guide) {
+    if (codeType === CodeClassNameEnum.guide) {
       return <ChatGuide text={strChildren} />;
     }
-    if (codeType === CodeClassName.questionGuide) {
+    if (codeType === CodeClassNameEnum.questionGuide) {
       return <QuestionGuide text={strChildren} />;
     }
-    if (codeType === CodeClassName.echarts) {
+    if (codeType === CodeClassNameEnum.echarts) {
       return <EChartsCodeBlock code={strChildren} />;
+    }
+    if (codeType === CodeClassNameEnum.iframe) {
+      return <IframeCodeBlock code={strChildren} />;
+    }
+    if (codeType && codeType.toLowerCase() === CodeClassNameEnum.html) {
+      return (
+        <IframeHtmlCodeBlock className={className} codeBlock={codeBlock} match={match}>
+          {children}
+        </IframeHtmlCodeBlock>
+      );
+    }
+    if (codeType === CodeClassNameEnum.video) {
+      return <VideoBlock code={strChildren} />;
+    }
+    if (codeType === CodeClassNameEnum.audio) {
+      return <AudioBlock code={strChildren} />;
     }
 
     return (
-      <CodeLight className={className} inline={inline} match={match}>
+      <CodeLight className={className} codeBlock={codeBlock} match={match}>
         {children}
       </CodeLight>
     );
-  }, [codeType, className, inline, match, children, strChildren]);
+  }, [codeType, className, codeBlock, match, children, strChildren]);
 
   return Component;
-});
+}
 
-const Image = React.memo(function Image({ src }: { src?: string }) {
+function Image({ src }: { src?: string }) {
   return <MdImage src={src} />;
-});
-const A = React.memo(function A({ children, ...props }: any) {
-  const { t } = useTranslation();
+}
 
-  // empty href link
-  if (!props.href && typeof children?.[0] === 'string') {
-    const text = useMemo(() => String(children), [children]);
-
-    return (
-      <MyTooltip label={t('core.chat.markdown.Quick Question')}>
-        <Button
-          variant={'whitePrimary'}
-          size={'xs'}
-          borderRadius={'md'}
-          my={1}
-          onClick={() => eventBus.emit(EventNameEnum.sendQuestion, { text })}
-        >
-          {text}
-        </Button>
-      </MyTooltip>
-    );
-  }
-
-  // quote link
-  if (children?.length === 1 && typeof children?.[0] === 'string') {
-    const text = String(children);
-    if (text === MARKDOWN_QUOTE_SIGN && props.href) {
-      return (
-        <MyTooltip label={props.href}>
-          <MyIcon
-            name={'core/chat/quoteSign'}
-            transform={'translateY(-2px)'}
-            w={'18px'}
-            color={'primary.500'}
-            cursor={'pointer'}
-            _hover={{
-              color: 'primary.700'
-            }}
-            onClick={() => getFileAndOpen(props.href)}
-          />
-        </MyTooltip>
-      );
+function RewritePre({ children }: any) {
+  const modifiedChildren = React.Children.map(children, (child) => {
+    if (React.isValidElement(child)) {
+      // @ts-ignore
+      return React.cloneElement(child, { codeBlock: true });
     }
-  }
+    return child;
+  });
 
-  return <Link {...props}>{children}</Link>;
-});
+  return <>{modifiedChildren}</>;
+}

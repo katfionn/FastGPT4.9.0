@@ -1,4 +1,4 @@
-import { connectionMongo, type Model } from '../../../common/mongo';
+import { connectionMongo, getMongoModel } from '../../../common/mongo';
 const { Schema, model, models } = connectionMongo;
 import { DatasetDataSchemaType } from '@fastgpt/global/core/dataset/type.d';
 import {
@@ -7,8 +7,9 @@ import {
 } from '@fastgpt/global/support/user/team/constant';
 import { DatasetCollectionName } from '../schema';
 import { DatasetColCollectionName } from '../collection/schema';
+import { DatasetDataIndexTypeEnum } from '@fastgpt/global/core/dataset/data/constants';
 
-export const DatasetDataCollectionName = 'dataset.datas';
+export const DatasetDataCollectionName = 'dataset_datas';
 
 const DatasetDataSchema = new Schema({
   teamId: {
@@ -39,16 +40,17 @@ const DatasetDataSchema = new Schema({
     type: String,
     default: ''
   },
-  fullTextToken: {
-    type: String,
-    default: ''
-  },
   indexes: {
     type: [
       {
+        // Abandon
         defaultIndex: {
-          type: Boolean,
-          default: false
+          type: Boolean
+        },
+        type: {
+          type: String,
+          enum: Object.values(DatasetDataIndexTypeEnum),
+          default: DatasetDataIndexTypeEnum.custom
         },
         dataId: {
           type: String,
@@ -71,28 +73,36 @@ const DatasetDataSchema = new Schema({
     type: Number,
     default: 0
   },
-  inited: {
-    type: Boolean
-  }
+  rebuilding: Boolean,
+
+  // Abandon
+  fullTextToken: String,
+  initFullText: Boolean
 });
 
 try {
-  // list collection and count data; list data
-  DatasetDataSchema.index(
-    { teamId: 1, datasetId: 1, collectionId: 1, chunkIndex: 1, updateTime: -1 },
-    { background: true }
-  );
-  // same data check
-  DatasetDataSchema.index({ teamId: 1, collectionId: 1, q: 1, a: 1 }, { background: true });
-  // full text index
-  DatasetDataSchema.index({ teamId: 1, datasetId: 1, fullTextToken: 'text' }, { background: true });
+  // list collection and count data; list data; delete collection(relate data)
+  DatasetDataSchema.index({
+    teamId: 1,
+    datasetId: 1,
+    collectionId: 1,
+    chunkIndex: 1,
+    updateTime: -1
+  });
+  // FullText tmp full text index
+  // DatasetDataSchema.index({ teamId: 1, datasetId: 1, fullTextToken: 'text' });
   // Recall vectors after data matching
-  DatasetDataSchema.index({ teamId: 1, datasetId: 1, 'indexes.dataId': 1 }, { background: true });
-  DatasetDataSchema.index({ updateTime: 1 }, { background: true });
+  DatasetDataSchema.index({ teamId: 1, datasetId: 1, collectionId: 1, 'indexes.dataId': 1 });
+  DatasetDataSchema.index({ updateTime: 1 });
+  // rebuild data
+  DatasetDataSchema.index({ rebuilding: 1, teamId: 1, datasetId: 1 });
+
+  DatasetDataSchema.index({ initFullText: 1 });
 } catch (error) {
   console.log(error);
 }
 
-export const MongoDatasetData: Model<DatasetDataSchemaType> =
-  models[DatasetDataCollectionName] || model(DatasetDataCollectionName, DatasetDataSchema);
-MongoDatasetData.syncIndexes();
+export const MongoDatasetData = getMongoModel<DatasetDataSchemaType>(
+  DatasetDataCollectionName,
+  DatasetDataSchema
+);

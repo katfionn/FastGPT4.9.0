@@ -1,42 +1,49 @@
-import type { NextApiRequest, NextApiResponse } from 'next';
+import type { NextApiResponse } from 'next';
 import { jsonRes } from '@fastgpt/service/common/response';
 import { connectToDatabase } from '@/service/mongo';
 import { GetChatSpeechProps } from '@/global/core/chat/api.d';
 import { text2Speech } from '@fastgpt/service/core/ai/audio/speech';
 import { pushAudioSpeechUsage } from '@/service/support/wallet/usage/push';
-import { authChatCert } from '@/service/support/permission/auth/chat';
+import { authChatCrud } from '@/service/support/permission/auth/chat';
 import { authType2UsageSource } from '@/service/support/wallet/usage/utils';
-import { getAudioSpeechModel } from '@fastgpt/service/core/ai/model';
+import { getTTSModel } from '@fastgpt/service/core/ai/model';
 import { MongoTTSBuffer } from '@fastgpt/service/common/buffer/tts/schema';
+import { ApiRequestProps } from '@fastgpt/service/type/next';
 
 /* 
 1. get tts from chatItem store
 2. get tts from ai
-3. save tts to chatItem store if chatItemId is provided
 4. push bill
 */
-
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+async function handler(req: ApiRequestProps<GetChatSpeechProps>, res: NextApiResponse) {
   try {
     await connectToDatabase();
-    const { ttsConfig, input } = req.body as GetChatSpeechProps;
+    const { ttsConfig, input } = req.body;
 
     if (!ttsConfig.model || !ttsConfig.voice) {
       throw new Error('model or voice not found');
     }
 
-    const { teamId, tmbId, authType } = await authChatCert({ req, authToken: true });
+    const { teamId, tmbId, authType } = await authChatCrud({
+      req,
+      authToken: true,
+      authApiKey: true,
+      ...req.body
+    });
 
-    const ttsModel = getAudioSpeechModel(ttsConfig.model);
+    const ttsModel = getTTSModel(ttsConfig.model);
     const voiceData = ttsModel.voices?.find((item) => item.value === ttsConfig.voice);
 
     if (!voiceData) {
       throw new Error('voice not found');
     }
 
+    const bufferId = `${ttsModel.model}-${ttsConfig.voice}`;
+
+    /* get audio from buffer */
     const ttsBuffer = await MongoTTSBuffer.findOne(
       {
-        bufferId: voiceData.bufferId,
+        bufferId,
         text: JSON.stringify({ text: input, speed: ttsConfig.speed })
       },
       'buffer'
@@ -46,6 +53,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       return res.end(new Uint8Array(ttsBuffer.buffer.buffer));
     }
 
+    /* request audio */
     await text2Speech({
       res,
       input,
@@ -54,6 +62,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       speed: ttsConfig.speed,
       onSuccess: async ({ model, buffer }) => {
         try {
+          /* bill */
           pushAudioSpeechUsage({
             model: model,
             charsLength: input.length,
@@ -62,11 +71,22 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
             source: authType2UsageSource({ authType })
           });
 
-          await MongoTTSBuffer.create({
-            bufferId: voiceData.bufferId,
-            text: JSON.stringify({ text: input, speed: ttsConfig.speed }),
-            buffer
-          });
+          /* create buffer */
+          await MongoTTSBuffer.create(
+            {
+              bufferId,
+              text: JSON.stringify({ text: input, speed: ttsConfig.speed }),
+              buffer
+            },
+            ttsModel.requestUrl && ttsModel.requestAuth
+              ? {
+                  path: ttsModel.requestUrl,
+                  headers: {
+                    Authorization: `Bearer ${ttsModel.requestAuth}`
+                  }
+                }
+              : {}
+          );
         } catch (error) {}
       },
       onError: (err) => {
@@ -83,3 +103,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
     });
   }
 }
+
+// 不能使用 NextApiResponse
+export default handler;

@@ -2,10 +2,25 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import { jsonRes } from '@fastgpt/service/common/response';
 import { connectToDatabase } from '@/service/mongo';
 import { authFileToken } from '@fastgpt/service/support/permission/controller';
-import { detect } from 'jschardet';
 import { getDownloadStream, getFileById } from '@fastgpt/service/common/file/gridfs/controller';
 import { CommonErrEnum } from '@fastgpt/global/common/error/code/common';
+import { stream2Encoding } from '@fastgpt/service/common/file/gridfs/utils';
 
+const previewableExtensions = [
+  'jpg',
+  'jpeg',
+  'png',
+  'gif',
+  'bmp',
+  'webp',
+  'txt',
+  'log',
+  'csv',
+  'md',
+  'json'
+];
+
+// Abandoned, use: file/read/[filename].ts
 export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   try {
     await connectToDatabase();
@@ -18,7 +33,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       throw new Error('fileId is empty');
     }
 
-    const [file, encodeStream] = await Promise.all([
+    const [file, fileStream] = await Promise.all([
       getFileById({ bucketName, fileId }),
       getDownloadStream({ bucketName, fileId })
     ]);
@@ -27,30 +42,33 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
       return Promise.reject(CommonErrEnum.fileNotFound);
     }
 
-    // get encoding
-    let buffers: Buffer = Buffer.from([]);
-    for await (const chunk of encodeStream) {
-      buffers = Buffer.concat([buffers, chunk]);
-      if (buffers.length > 10) {
-        encodeStream.abort();
-        break;
+    const { stream, encoding } = await (async () => {
+      if (file.metadata?.encoding) {
+        return {
+          stream: fileStream,
+          encoding: file.metadata.encoding
+        };
       }
-    }
+      return stream2Encoding(fileStream);
+    })();
 
-    const encoding = detect(buffers)?.encoding || 'utf-8';
+    const extension = file.filename.split('.').pop() || '';
+    const disposition = previewableExtensions.includes(extension) ? 'inline' : 'attachment';
 
     res.setHeader('Content-Type', `${file.contentType}; charset=${encoding}`);
-    res.setHeader('Cache-Control', 'public, max-age=3600');
-    res.setHeader('Content-Disposition', `inline; filename="${encodeURIComponent(file.filename)}"`);
+    res.setHeader('Cache-Control', 'public, max-age=31536000');
+    res.setHeader(
+      'Content-Disposition',
+      `${disposition}; filename="${encodeURIComponent(file.filename)}"`
+    );
+    res.setHeader('Content-Length', file.length);
 
-    const fileStream = await getDownloadStream({ bucketName, fileId });
+    stream.pipe(res);
 
-    fileStream.pipe(res);
-
-    fileStream.on('error', () => {
+    stream.on('error', () => {
       res.status(500).end();
     });
-    fileStream.on('end', () => {
+    stream.on('end', () => {
       res.end();
     });
   } catch (error) {
@@ -62,6 +80,6 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 }
 export const config = {
   api: {
-    responseLimit: '32mb'
+    responseLimit: '100mb'
   }
 };

@@ -1,40 +1,24 @@
 import {
-  AudioSpeechModelType,
+  TTSModelType,
   ChatModelItemType,
   FunctionModelItemType,
   LLMModelItemType,
   ReRankModelItemType,
-  VectorModelItemType,
-  WhisperModelType
+  EmbeddingModelItemType,
+  STTModelType
 } from '@fastgpt/global/core/ai/model.d';
-import { TrackEventName } from '@/constants/common';
-import { AppSimpleEditConfigTemplateType } from '@fastgpt/global/core/app/type';
+import { TrackEventName } from '@/web/common/system/constants';
 import { SubPlanType } from '@fastgpt/global/support/wallet/sub/type';
 
-export type PagingData<T> = {
-  pageNum: number;
-  pageSize: number;
-  data: T[];
-  total?: number;
-};
-
-export type RequestPaging = { pageNum: number; pageSize: number; [key]: any };
-
 declare global {
-  var systemInitd: boolean;
-
   var qaQueueLen: number;
   var vectorQueueLen: number;
-
-  var systemVersion: string;
-
-  var simpleModeTemplates: AppSimpleEditConfigTemplateType[];
 
   interface Window {
     grecaptcha: any;
     QRCode: any;
     umami?: {
-      track: (event: `${TrackEventName}`, data: any) => void;
+      track: (event: TrackEventName, data: any) => void;
     };
   }
 }

@@ -62,10 +62,11 @@ export default function VariablePickerPlugin({
                 borderColor={'borderColor.base'}
                 p={2}
                 borderRadius={'md'}
-                position={'fixed'}
+                position={'absolute'}
                 w={'auto'}
-                overflow={'hidden'}
                 zIndex={99999}
+                maxH={'300px'}
+                overflow={'auto'}
               >
                 {variables.map((item, index) => (
                   <Flex
@@ -99,9 +100,9 @@ export default function VariablePickerPlugin({
                     }}
                   >
                     <MyIcon name={(item.icon as any) || 'core/modules/variable'} w={'14px'} />
-                    <Box ml={2} fontSize={'sm'}>
+                    <Box ml={2} fontSize={'sm'} whiteSpace={'nowrap'}>
                       {item.key}
-                      {item.key !== item.label && `(${item.label})`}
+                      {item.key !== item.label && `(${t(item.label as any)})`}
                     </Box>
                   </Flex>
                 ))}

@@ -1,8 +1,14 @@
-import { CollectionWithDatasetType, DatasetSchemaType } from '@fastgpt/global/core/dataset/type';
+import { DatasetSchemaType } from '@fastgpt/global/core/dataset/type';
 import { MongoDatasetCollection } from './collection/schema';
 import { MongoDataset } from './schema';
-import { delCollectionAndRelatedSources } from './collection/controller';
+import { delCollectionRelatedSource } from './collection/controller';
 import { ClientSession } from '../../common/mongo';
+import { MongoDatasetTraining } from './training/schema';
+import { MongoDatasetData } from './data/schema';
+import { deleteDatasetDataVector } from '../../common/vectorStore/controller';
+import { MongoDatasetDataText } from './data/dataTextSchema';
+import { DatasetErrEnum } from '@fastgpt/global/common/error/code/dataset';
+import { retryFn } from '@fastgpt/global/common/system/utils';
 
 /* ============= dataset ========== */
 /* find all datasetId by top datasetId */
@@ -34,7 +40,7 @@ export async function findDatasetAndAllChildren({
     return datasets;
   };
   const [dataset, childDatasets] = await Promise.all([
-    MongoDataset.findById(datasetId),
+    MongoDataset.findById(datasetId).lean(),
     find(datasetId)
   ]);
 
@@ -46,11 +52,11 @@ export async function findDatasetAndAllChildren({
 }
 
 export async function getCollectionWithDataset(collectionId: string) {
-  const data = (await MongoDatasetCollection.findById(collectionId)
-    .populate('datasetId')
-    .lean()) as CollectionWithDatasetType;
+  const data = await MongoDatasetCollection.findById(collectionId)
+    .populate<{ dataset: DatasetSchemaType }>('dataset')
+    .lean();
   if (!data) {
-    return Promise.reject('Collection is not exist');
+    return Promise.reject(DatasetErrEnum.unExistCollection);
   }
   return data;
 }
@@ -68,10 +74,10 @@ export async function delDatasetRelevantData({
   const teamId = datasets[0].teamId;
 
   if (!teamId) {
-    return Promise.reject('teamId is required');
+    return Promise.reject('TeamId is required');
   }
 
-  const datasetIds = datasets.map((item) => String(item._id));
+  const datasetIds = datasets.map((item) => item._id);
 
   // Get _id, teamId, fileId, metadata.relatedImgId for all collections
   const collections = await MongoDatasetCollection.find(
@@ -79,8 +85,33 @@ export async function delDatasetRelevantData({
       teamId,
       datasetId: { $in: datasetIds }
     },
-    '_id teamId fileId metadata'
+    '_id teamId datasetId fileId metadata'
   ).lean();
 
-  await delCollectionAndRelatedSources({ collections, session });
+  await retryFn(async () => {
+    await Promise.all([
+      // delete training data
+      MongoDatasetTraining.deleteMany({
+        teamId,
+        datasetId: { $in: datasetIds }
+      }),
+      //Delete dataset_data_texts
+      MongoDatasetDataText.deleteMany({
+        teamId,
+        datasetId: { $in: datasetIds }
+      }),
+      //delete dataset_datas
+      MongoDatasetData.deleteMany({ teamId, datasetId: { $in: datasetIds } }),
+      // Delete Image and file
+      delCollectionRelatedSource({ collections }),
+      // Delete vector data
+      deleteDatasetDataVector({ teamId, datasetIds })
+    ]);
+  });
+
+  // delete collections
+  await MongoDatasetCollection.deleteMany({
+    teamId,
+    datasetId: { $in: datasetIds }
+  }).session(session);
 }

@@ -1,7 +1,7 @@
-import { connectionMongo, type Model } from '../../../common/mongo';
-const { Schema, model, models } = connectionMongo;
+import { connectionMongo, getMongoModel, type Model } from '../../../common/mongo';
+const { Schema } = connectionMongo;
 import { UsageSchemaType } from '@fastgpt/global/support/wallet/usage/type';
-import { UsageSourceMap } from '@fastgpt/global/support/wallet/usage/constants';
+import { UsageSourceEnum } from '@fastgpt/global/support/wallet/usage/constants';
 import {
   TeamCollectionName,
   TeamMemberCollectionName
@@ -22,16 +22,22 @@ const UsageSchema = new Schema({
   },
   source: {
     type: String,
-    enum: Object.keys(UsageSourceMap),
+    enum: Object.values(UsageSourceEnum),
     required: true
   },
   appName: {
+    // usage name
     type: String,
     default: ''
   },
   appId: {
     type: Schema.Types.ObjectId,
     ref: 'apps',
+    required: false
+  },
+  pluginId: {
+    type: Schema.Types.ObjectId,
+    ref: 'plugins',
     required: false
   },
   time: {
@@ -55,15 +61,14 @@ const UsageSchema = new Schema({
 });
 
 try {
-  UsageSchema.index({ teamId: 1, tmbId: 1, source: 1, time: -1 }, { background: true });
+  UsageSchema.index({ teamId: 1, time: 1, tmbId: 1, source: 1 });
+  UsageSchema.index({ teamId: 1, time: 1, appName: 1 });
   // timer task. clear dead team
-  UsageSchema.index({ teamId: 1, time: -1 }, { background: true });
+  // UsageSchema.index({ teamId: 1, time: -1 });
 
-  UsageSchema.index({ time: 1 }, { expireAfterSeconds: 180 * 24 * 60 * 60 });
+  UsageSchema.index({ time: 1 }, { expireAfterSeconds: 360 * 24 * 60 * 60 });
 } catch (error) {
   console.log(error);
 }
 
-export const MongoUsage: Model<UsageSchemaType> =
-  models[UsageCollectionName] || model(UsageCollectionName, UsageSchema);
-MongoUsage.syncIndexes();
+export const MongoUsage = getMongoModel<UsageSchemaType>(UsageCollectionName, UsageSchema);

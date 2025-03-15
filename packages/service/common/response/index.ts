@@ -1,5 +1,5 @@
 import type { NextApiResponse } from 'next';
-import { SseResponseEventEnum } from '@fastgpt/global/core/module/runtime/constants';
+import { SseResponseEventEnum } from '@fastgpt/global/core/workflow/runtime/constants';
 import { proxyError, ERROR_RESPONSE, ERROR_ENUM } from '@fastgpt/global/common/error/errorCode';
 import { addLog } from '../system/log';
 import { clearCookie } from '../../support/permission/controller';
@@ -18,9 +18,10 @@ export const jsonRes = <T = any>(
     message?: string;
     data?: T;
     error?: any;
+    url?: string;
   }
 ) => {
-  const { code = 200, message = '', data = null, error } = props || {};
+  const { code = 200, message = '', data = null, error, url } = props || {};
 
   const errResponseKey = typeof error === 'string' ? error : error?.message;
   // Specified error
@@ -30,7 +31,17 @@ export const jsonRes = <T = any>(
       clearCookie(res);
     }
 
-    return res.json(ERROR_RESPONSE[errResponseKey]);
+    addLog.error(`Api response error: ${url}`, ERROR_RESPONSE[errResponseKey]);
+
+    res.status(code);
+
+    if (message) {
+      res.send(message);
+    } else {
+      res.json(ERROR_RESPONSE[errResponseKey]);
+    }
+
+    return;
   }
 
   // another error
@@ -47,7 +58,7 @@ export const jsonRes = <T = any>(
       msg = error?.error?.message;
     }
 
-    addLog.error(`response error: ${msg}`, error);
+    addLog.error(`Api response error: ${url}, ${msg}`, error);
   }
 
   res.status(code).json({

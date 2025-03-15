@@ -1,10 +1,10 @@
-import { getVectorCountByTeamId } from '../../common/vectorStore/controller';
 import { getTeamPlanStatus, getTeamStandPlan } from '../../support/wallet/sub/utils';
 import { MongoApp } from '../../core/app/schema';
-import { MongoPlugin } from '../../core/plugin/schema';
 import { MongoDataset } from '../../core/dataset/schema';
 import { DatasetTypeEnum } from '@fastgpt/global/core/dataset/constants';
 import { TeamErrEnum } from '@fastgpt/global/common/error/code/team';
+import { SystemErrEnum } from '@fastgpt/global/common/error/code/system';
+import { AppTypeEnum } from '@fastgpt/global/core/app/constants';
 
 export const checkDatasetLimit = async ({
   teamId,
@@ -13,12 +13,12 @@ export const checkDatasetLimit = async ({
   teamId: string;
   insertLen?: number;
 }) => {
-  const [{ standardConstants, totalPoints, usedPoints, datasetMaxSize }, usedSize] =
-    await Promise.all([getTeamPlanStatus({ teamId }), getVectorCountByTeamId(teamId)]);
+  const { standardConstants, totalPoints, usedPoints, datasetMaxSize, usedDatasetSize } =
+    await getTeamPlanStatus({ teamId });
 
   if (!standardConstants) return;
 
-  if (usedSize + insertLen >= datasetMaxSize) {
+  if (usedDatasetSize + insertLen >= datasetMaxSize) {
     return Promise.reject(TeamErrEnum.datasetSizeNotEnough);
   }
 
@@ -57,25 +57,21 @@ export const checkTeamDatasetLimit = async (teamId: string) => {
   if (standardConstants && datasetCount >= standardConstants.maxDatasetAmount) {
     return Promise.reject(TeamErrEnum.datasetAmountNotEnough);
   }
-};
-export const checkTeamAppLimit = async (teamId: string) => {
-  const [{ standardConstants }, appCount] = await Promise.all([
-    getTeamStandPlan({ teamId }),
-    MongoApp.count({ teamId })
-  ]);
-
-  if (standardConstants && appCount >= standardConstants.maxAppAmount) {
-    return Promise.reject(TeamErrEnum.appAmountNotEnough);
+  if (!global.feConfigs.isPlus && datasetCount >= 30) {
+    return Promise.reject(SystemErrEnum.communityVersionNumLimit);
   }
 };
-export const checkTeamPluginLimit = async (teamId: string) => {
-  const [{ standardConstants }, pluginCount] = await Promise.all([
+export const checkTeamAppLimit = async (teamId: string, amount = 1) => {
+  const [{ standardConstants }, appCount] = await Promise.all([
     getTeamStandPlan({ teamId }),
-    MongoPlugin.count({ teamId })
+    MongoApp.countDocuments({
+      teamId,
+      type: { $in: [AppTypeEnum.simple, AppTypeEnum.workflow, AppTypeEnum.plugin] }
+    })
   ]);
 
-  if (standardConstants && pluginCount >= standardConstants.maxAppAmount) {
-    return Promise.reject(TeamErrEnum.pluginAmountNotEnough);
+  if (standardConstants && appCount + amount >= standardConstants.maxAppAmount) {
+    return Promise.reject(TeamErrEnum.appAmountNotEnough);
   }
 };
 

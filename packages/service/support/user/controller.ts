@@ -22,7 +22,10 @@ export async function getUserDetail({
 }): Promise<UserType> {
   const tmb = await (async () => {
     if (tmbId) {
-      return getTmbInfoByTmbId({ tmbId });
+      try {
+        const result = await getTmbInfoByTmbId({ tmbId });
+        return result;
+      } catch (error) {}
     }
     if (userId) {
       return getUserDefaultTeam({ userId });
@@ -38,11 +41,12 @@ export async function getUserDetail({
   return {
     _id: user._id,
     username: user.username,
-    avatar: user.avatar,
-    balance: user.balance,
+    avatar: tmb.avatar,
     timezone: user.timezone,
     promotionRate: user.promotionRate,
-    openaiAccount: user.openaiAccount,
-    team: tmb
+    team: tmb,
+    notificationAccount: tmb.notificationAccount,
+    permission: tmb.permission,
+    contact: user.contact
   };
 }
