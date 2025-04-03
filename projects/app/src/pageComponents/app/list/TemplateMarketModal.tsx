@@ -289,7 +289,7 @@ const TemplateMarketModal = ({
           <MySelect<TemplateAppType>
             h={'8'}
             value={currentAppType}
-            onchange={(value) => {
+            onChange={(value) => {
               setCurrentAppType(value);
             }}
             bg={'myGray.100'}
@@ -319,7 +319,7 @@ const TemplateMarketModal = ({
                 onChange={(e) => setCurrentSearch(e.target.value)}
                 h={8}
                 bg={'myGray.50'}
-                maxLength={20}
+                maxLength={100}
                 borderRadius={'sm'}
               />
             </Box>

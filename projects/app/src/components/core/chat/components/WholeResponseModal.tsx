@@ -5,7 +5,7 @@ import { useTranslation } from 'next-i18next';
 import { moduleTemplatesFlat } from '@fastgpt/global/core/workflow/template/constants';
 import MyModal from '@fastgpt/web/components/common/MyModal';
 import Markdown from '@/components/Markdown';
-import { QuoteList } from '../ChatContainer/ChatBox/components/QuoteModal';
+import QuoteList from '../ChatContainer/ChatBox/components/QuoteList';
 import { DatasetSearchModeMap } from '@fastgpt/global/core/dataset/constants';
 import { formatNumber } from '@fastgpt/global/common/math/tools';
 import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
@@ -32,11 +32,13 @@ type sideTabItemType = {
 export const WholeResponseContent = ({
   activeModule,
   hideTabs,
-  dataId
+  dataId,
+  chatTime
 }: {
   activeModule: ChatHistoryItemResType;
   hideTabs?: boolean;
   dataId?: string;
+  chatTime?: Date;
 }) => {
   const { t } = useTranslation();
 
@@ -226,19 +228,46 @@ export const WholeResponseContent = ({
         {activeModule?.searchMode && (
           <Row
             label={t('common:core.dataset.search.search mode')}
-            // @ts-ignore
-            value={t(DatasetSearchModeMap[activeModule.searchMode]?.title)}
+            rawDom={
+              <Flex border={'base'} borderRadius={'md'} p={2}>
+                <Box>
+                  {/* @ts-ignore */}
+                  {t(DatasetSearchModeMap[activeModule.searchMode]?.title)}
+                </Box>
+                {activeModule.embeddingWeight && (
+                  <>{`(${t('chat:response_hybrid_weight', {
+                    emb: activeModule.embeddingWeight,
+                    text: 1 - activeModule.embeddingWeight
+                  })})`}</>
+                )}
+              </Flex>
+            }
           />
         )}
+
         <Row
           label={t('common:core.chat.response.module similarity')}
           value={activeModule?.similarity}
         />
         <Row label={t('common:core.chat.response.module limit')} value={activeModule?.limit} />
-        <Row
-          label={t('common:core.chat.response.search using reRank')}
-          value={`${activeModule?.searchUsingReRank}`}
-        />
+        {activeModule?.searchUsingReRank !== undefined && (
+          <Row
+            label={t('common:core.chat.response.search using reRank')}
+            rawDom={
+              <Box border={'base'} borderRadius={'md'} p={2}>
+                {activeModule?.searchUsingReRank ? (
+                  activeModule?.rerankModel ? (
+                    <Box>{`${activeModule.rerankModel}: ${activeModule.rerankWeight}`}</Box>
+                  ) : (
+                    'True'
+                  )
+                ) : (
+                  `False`
+                )}
+              </Box>
+            }
+          />
+        )}
         {activeModule.queryExtensionResult && (
           <>
             <Row
@@ -263,7 +292,7 @@ export const WholeResponseContent = ({
         {activeModule.quoteList && activeModule.quoteList.length > 0 && (
           <Row
             label={t('common:core.chat.response.module quoteList')}
-            rawDom={<QuoteList chatItemId={dataId} rawSearch={activeModule.quoteList} />}
+            rawDom={<QuoteList chatItemDataId={dataId} rawSearch={activeModule.quoteList} />}
           />
         )}
       </>
@@ -562,11 +591,13 @@ const SideTabItem = ({
 export const ResponseBox = React.memo(function ResponseBox({
   response,
   dataId,
+  chatTime,
   hideTabs = false,
   useMobile = false
 }: {
   response: ChatHistoryItemResType[];
   dataId?: string;
+  chatTime: Date;
   hideTabs?: boolean;
   useMobile?: boolean;
 }) {
@@ -689,7 +720,12 @@ export const ResponseBox = React.memo(function ResponseBox({
             </Box>
           </Box>
           <Box flex={'5 0 0'} w={0} height={'100%'}>
-            <WholeResponseContent dataId={dataId} activeModule={activeModule} hideTabs={hideTabs} />
+            <WholeResponseContent
+              dataId={dataId}
+              activeModule={activeModule}
+              hideTabs={hideTabs}
+              chatTime={chatTime}
+            />
           </Box>
         </Flex>
       ) : (
@@ -753,6 +789,7 @@ export const ResponseBox = React.memo(function ResponseBox({
                   dataId={dataId}
                   activeModule={activeModule}
                   hideTabs={hideTabs}
+                  chatTime={chatTime}
                 />
               </Box>
             </Flex>
@@ -763,7 +800,15 @@ export const ResponseBox = React.memo(function ResponseBox({
   );
 });
 
-const WholeResponseModal = ({ onClose, dataId }: { onClose: () => void; dataId: string }) => {
+const WholeResponseModal = ({
+  onClose,
+  dataId,
+  chatTime
+}: {
+  onClose: () => void;
+  dataId: string;
+  chatTime: Date;
+}) => {
   const { t } = useTranslation();
 
   const { getHistoryResponseData } = useContextSelector(ChatBoxContext, (v) => v);
@@ -792,7 +837,7 @@ const WholeResponseModal = ({ onClose, dataId }: { onClose: () => void; dataId: 
       }
     >
       {!!response?.length ? (
-        <ResponseBox response={response} dataId={dataId} />
+        <ResponseBox response={response} dataId={dataId} chatTime={chatTime} />
       ) : (
         <EmptyTip text={t('chat:no_workflow_response')} />
       )}

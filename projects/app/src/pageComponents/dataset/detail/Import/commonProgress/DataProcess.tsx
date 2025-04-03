@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useRef } from 'react';
+import React, { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Box,
   Flex,
@@ -20,10 +20,11 @@ import MyIcon from '@fastgpt/web/components/common/Icon';
 import { useTranslation } from 'next-i18next';
 import LeftRadio from '@fastgpt/web/components/common/Radio/LeftRadio';
 import {
+  DataChunkSplitModeEnum,
   DatasetCollectionDataProcessModeEnum,
   DatasetCollectionDataProcessModeMap
 } from '@fastgpt/global/core/dataset/constants';
-import { ChunkSettingModeEnum } from '@/web/core/dataset/constants';
+import { ChunkSettingModeEnum } from '@fastgpt/global/core/dataset/constants';
 import MyTooltip from '@fastgpt/web/components/common/MyTooltip';
 import { useSystemStore } from '@/web/common/system/useSystemStore';
 import MyModal from '@fastgpt/web/components/common/MyModal';
@@ -36,26 +37,27 @@ import MyNumberInput from '@fastgpt/web/components/common/Input/NumberInput';
 import QuestionTip from '@fastgpt/web/components/common/MyTooltip/QuestionTip';
 import { shadowLight } from '@fastgpt/web/styles/theme';
 import { DatasetPageContext } from '@/web/core/dataset/context/datasetPageContext';
-import { useToast } from '@fastgpt/web/hooks/useToast';
+import MySelect from '@fastgpt/web/components/common/MySelect';
+import { getIndexSizeSelectList } from '@fastgpt/global/core/dataset/training/utils';
+import RadioGroup from '@fastgpt/web/components/common/Radio/RadioGroup';
 
 function DataProcess() {
   const { t } = useTranslation();
   const { feConfigs } = useSystemStore();
-  const { toast } = useToast();
-
-  const { goToNext, processParamsForm, chunkSizeField, minChunkSize, maxChunkSize } =
-    useContextSelector(DatasetImportContext, (v) => v);
-  const datasetDetail = useContextSelector(DatasetPageContext, (v) => v.datasetDetail);
-  const { getValues, setValue, register, watch } = processParamsForm;
-  const trainingType = watch('trainingType');
-  const chunkSettingMode = watch('chunkSettingMode');
 
   const {
-    isOpen: isOpenCustomPrompt,
-    onOpen: onOpenCustomPrompt,
-    onClose: onCloseCustomPrompt
-  } = useDisclosure();
+    goToNext,
+    processParamsForm,
+    chunkSizeField,
+    minChunkSize,
+    maxChunkSize,
+    maxIndexSize,
+    indexSize
+  } = useContextSelector(DatasetImportContext, (v) => v);
+  const datasetDetail = useContextSelector(DatasetPageContext, (v) => v.datasetDetail);
+  const { setValue, register, watch, getValues } = processParamsForm;
 
+  const trainingType = watch('trainingType');
   const trainingModeList = useMemo(() => {
     const list = Object.entries(DatasetCollectionDataProcessModeMap);
     return list
@@ -65,7 +67,42 @@ function DataProcess() {
         value: key as DatasetCollectionDataProcessModeEnum,
         tooltip: t(value.tooltip as any)
       }));
-  }, []);
+  }, [t]);
+
+  const chunkSettingMode = watch('chunkSettingMode');
+  const chunkSplitMode = watch('chunkSplitMode');
+
+  const customSplitList = [
+    { label: t('dataset:split_sign_null'), value: '' },
+    { label: t('dataset:split_sign_break'), value: '\\n' },
+    { label: t('dataset:split_sign_break2'), value: '\\n\\n' },
+    { label: t('dataset:split_sign_period'), value: '.|。' },
+    { label: t('dataset:split_sign_exclamatiob'), value: '!|！' },
+    { label: t('dataset:split_sign_question'), value: '?|？' },
+    { label: t('dataset:split_sign_semicolon'), value: ';|；' },
+    { label: '=====', value: '=====' },
+    { label: t('dataset:split_sign_custom'), value: 'Other' }
+  ];
+
+  const [customListSelectValue, setCustomListSelectValue] = useState(getValues('chunkSplitter'));
+  useEffect(() => {
+    if (customListSelectValue === 'Other') {
+      setValue('chunkSplitter', '');
+    } else {
+      setValue('chunkSplitter', customListSelectValue);
+    }
+  }, [customListSelectValue, setValue]);
+
+  // Index size
+  const indexSizeSeletorList = useMemo(() => getIndexSizeSelectList(maxIndexSize), [maxIndexSize]);
+
+  // QA
+  const qaPrompt = watch('qaPrompt');
+  const {
+    isOpen: isOpenCustomPrompt,
+    onOpen: onOpenCustomPrompt,
+    onClose: onCloseCustomPrompt
+  } = useDisclosure();
 
   const Title = useCallback(({ title }: { title: string }) => {
     return (
@@ -159,23 +196,36 @@ function DataProcess() {
                   gridTemplateColumns={'repeat(2, 1fr)'}
                 />
               </Box>
-              {trainingType === DatasetCollectionDataProcessModeEnum.chunk && feConfigs?.isPlus && (
+              {trainingType === DatasetCollectionDataProcessModeEnum.chunk && (
                 <Box mt={6}>
                   <Box fontSize={'sm'} mb={2} color={'myGray.600'}>
                     {t('dataset:enhanced_indexes')}
                   </Box>
                   <HStack gap={[3, 7]}>
                     <HStack flex={'1'} spacing={1}>
-                      <Checkbox {...register('autoIndexes')}>
-                        <FormLabel>{t('dataset:auto_indexes')}</FormLabel>
-                      </Checkbox>
+                      <MyTooltip
+                        label={!feConfigs?.isPlus ? t('common:commercial_function_tip') : ''}
+                      >
+                        <Checkbox isDisabled={!feConfigs?.isPlus} {...register('autoIndexes')}>
+                          <FormLabel>{t('dataset:auto_indexes')}</FormLabel>
+                        </Checkbox>
+                      </MyTooltip>
                       <QuestionTip label={t('dataset:auto_indexes_tips')} />
                     </HStack>
                     <HStack flex={'1'} spacing={1}>
                       <MyTooltip
-                        label={!datasetDetail?.vlmModel ? t('common:error_vlm_not_config') : ''}
+                        label={
+                          !feConfigs?.isPlus
+                            ? t('common:commercial_function_tip')
+                            : !datasetDetail?.vlmModel
+                              ? t('common:error_vlm_not_config')
+                              : ''
+                        }
                       >
-                        <Checkbox isDisabled={!datasetDetail?.vlmModel} {...register('imageIndex')}>
+                        <Checkbox
+                          isDisabled={!feConfigs?.isPlus || !datasetDetail?.vlmModel}
+                          {...register('imageIndex')}
+                        >
                           <FormLabel>{t('dataset:image_auto_parse')}</FormLabel>
                         </Checkbox>
                       </MyTooltip>
@@ -202,53 +252,97 @@ function DataProcess() {
                       children: chunkSettingMode === ChunkSettingModeEnum.custom && (
                         <Box mt={5}>
                           <Box>
-                            <Flex alignItems={'center'}>
-                              <Box>{t('dataset:ideal_chunk_length')}</Box>
-                              <QuestionTip label={t('dataset:ideal_chunk_length_tips')} />
-                            </Flex>
-                            <Box
-                              mt={1}
-                              css={{
-                                '& > span': {
-                                  display: 'block'
+                            <RadioGroup<DataChunkSplitModeEnum>
+                              list={[
+                                {
+                                  title: t('dataset:split_chunk_size'),
+                                  value: DataChunkSplitModeEnum.size
+                                },
+                                {
+                                  title: t('dataset:split_chunk_char'),
+                                  value: DataChunkSplitModeEnum.char,
+                                  tooltip: t('dataset:custom_split_sign_tip')
                                 }
+                              ]}
+                              value={chunkSplitMode}
+                              onChange={(e) => {
+                                setValue('chunkSplitMode', e);
                               }}
-                            >
-                              <MyTooltip
-                                label={t('common:core.dataset.import.Chunk Range', {
-                                  min: minChunkSize,
-                                  max: maxChunkSize
-                                })}
+                            />
+
+                            {chunkSplitMode === DataChunkSplitModeEnum.size && (
+                              <Box
+                                mt={1.5}
+                                css={{
+                                  '& > span': {
+                                    display: 'block'
+                                  }
+                                }}
                               >
-                                <MyNumberInput
-                                  register={register}
-                                  name={chunkSizeField}
-                                  min={minChunkSize}
-                                  max={maxChunkSize}
-                                  size={'sm'}
-                                  step={100}
-                                />
-                              </MyTooltip>
-                            </Box>
+                                <MyTooltip
+                                  label={t('common:core.dataset.import.Chunk Range', {
+                                    min: minChunkSize,
+                                    max: maxChunkSize
+                                  })}
+                                >
+                                  <MyNumberInput
+                                    register={register}
+                                    name={chunkSizeField}
+                                    min={minChunkSize}
+                                    max={maxChunkSize}
+                                    size={'sm'}
+                                    step={100}
+                                  />
+                                </MyTooltip>
+                              </Box>
+                            )}
+
+                            {chunkSplitMode === DataChunkSplitModeEnum.char && (
+                              <HStack mt={1.5}>
+                                <Box flex={'1 0 0'}>
+                                  <MySelect<string>
+                                    list={customSplitList}
+                                    size={'sm'}
+                                    bg={'myGray.50'}
+                                    value={customListSelectValue}
+                                    h={'32px'}
+                                    onChange={(val) => {
+                                      setCustomListSelectValue(val);
+                                    }}
+                                  />
+                                </Box>
+                                {customListSelectValue === 'Other' && (
+                                  <Input
+                                    flex={'1 0 0'}
+                                    h={'32px'}
+                                    size={'sm'}
+                                    bg={'myGray.50'}
+                                    placeholder="\n;======;==SPLIT=="
+                                    {...register('chunkSplitter')}
+                                  />
+                                )}
+                              </HStack>
+                            )}
                           </Box>
 
-                          <Box mt={3}>
+                          {trainingType === DatasetCollectionDataProcessModeEnum.chunk && (
                             <Box>
-                              {t('common:core.dataset.import.Custom split char')}
-                              <QuestionTip
-                                label={t('common:core.dataset.import.Custom split char Tips')}
-                              />
+                              <Flex alignItems={'center'} mt={3}>
+                                <Box>{t('dataset:index_size')}</Box>
+                                <QuestionTip label={t('dataset:index_size_tips')} />
+                              </Flex>
+                              <Box mt={1}>
+                                <MySelect<number>
+                                  bg={'myGray.50'}
+                                  list={indexSizeSeletorList}
+                                  value={indexSize}
+                                  onChange={(val) => {
+                                    setValue('indexSize', val);
+                                  }}
+                                />
+                              </Box>
                             </Box>
-                            <Box mt={1}>
-                              <Input
-                                size={'sm'}
-                                bg={'myGray.50'}
-                                defaultValue={''}
-                                placeholder="\n;======;==SPLIT=="
-                                {...register('customSplitChar')}
-                              />
-                            </Box>
-                          </Box>
+                          )}
 
                           {showQAPromptInput && (
                             <Box mt={3}>
@@ -271,7 +365,7 @@ function DataProcess() {
                                   }
                                 }}
                               >
-                                {getValues('qaPrompt')}
+                                {qaPrompt}
 
                                 <Box
                                   display={'none'}
@@ -320,44 +414,6 @@ function DataProcess() {
             </AccordionPanel>
           </AccordionItem>
 
-          {/* <AccordionItem mt={4} border={'none'}>
-            <Title title={t('dataset:import_model_config')} />
-            <AccordionPanel p={2} fontSize={'sm'}>
-              <Box>
-                <Box>{t('common:core.ai.model.Dataset Agent Model')}</Box>
-                <Box mt={1}>
-                  <AIModelSelector
-                    w={'100%'}
-                    value={llmModel}
-                    list={datasetModelList.map((item) => ({
-                      label: item.name,
-                      value: item.model
-                    }))}
-                    onchange={(e) => {
-                      setValue('llmModel', e);
-                    }}
-                  />
-                </Box>
-              </Box>
-              <Box pt={5}>
-                <Box>{t('dataset:vllm_model')}</Box>
-                <Box mt={1}>
-                  <AIModelSelector
-                    w={'100%'}
-                    value={vlmModel}
-                    list={vllmModelList.map((item) => ({
-                      label: item.name,
-                      value: item.model
-                    }))}
-                    onchange={(e) => {
-                      setValue('vlmModel', e);
-                    }}
-                  />
-                </Box>
-              </Box>
-            </AccordionPanel>
-          </AccordionItem> */}
-
           <Flex mt={5} gap={3} justifyContent={'flex-end'}>
             <Button
               onClick={() => {
@@ -372,7 +428,7 @@ function DataProcess() {
 
       {isOpenCustomPrompt && (
         <PromptTextarea
-          defaultValue={getValues('qaPrompt')}
+          defaultValue={qaPrompt}
           onChange={(e) => {
             setValue('qaPrompt', e);
           }}

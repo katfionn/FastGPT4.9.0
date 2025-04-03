@@ -126,7 +126,7 @@ export const useChatTest = ({
 
   const CustomChatContainer = useMemoizedFn(() =>
     appDetail.type === AppTypeEnum.plugin ? (
-      <Box p={5}>
+      <Box p={5} pb={16}>
         <PluginRunBox
           appId={appId}
           chatId={chatId}
@@ -140,7 +140,7 @@ export const useChatTest = ({
         appId={appId}
         chatId={chatId}
         showMarkIcon
-        chatType="chat"
+        chatType={'chat'}
         onStartChat={startChat}
       />
     )

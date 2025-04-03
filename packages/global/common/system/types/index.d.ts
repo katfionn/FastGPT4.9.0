@@ -6,7 +6,7 @@ import type {
   EmbeddingModelItemType,
   AudioSpeechModels,
   STTModelType,
-  ReRankModelItemType
+  RerankModelItemType
 } from '../../../core/ai/model.d';
 import { SubTypeEnum } from '../../../support/wallet/sub/constants';
 
@@ -35,7 +35,7 @@ export type FastGPTConfigFileType = {
   // Abandon
   llmModels?: ChatModelItemType[];
   vectorModels?: EmbeddingModelItemType[];
-  reRankModels?: ReRankModelItemType[];
+  reRankModels?: RerankModelItemType[];
   audioSpeechModels?: TTSModelType[];
   whisperModel?: STTModelType;
 };
@@ -84,11 +84,6 @@ export type FastGPTFeConfigsType = {
     github?: string;
     google?: string;
     wechat?: string;
-    dingtalk?: string;
-    wecom?: {
-      corpid?: string;
-      agentid?: string;
-    };
     microsoft?: {
       clientId?: string;
       tenantId?: string;
@@ -117,7 +112,7 @@ export type SystemEnvType = {
   vectorMaxProcess: number;
   qaMaxProcess: number;
   vlmMaxProcess: number;
-  pgHNSWEfSearch: number;
+  hnswEfSearch: number;
   tokenWorkers: number; // token count max worker
 
   oneapiUrl?: string;

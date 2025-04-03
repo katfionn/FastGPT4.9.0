@@ -2,6 +2,7 @@ import type { LLMModelItemType, EmbeddingModelItemType } from '../../core/ai/mod
 import { PermissionTypeEnum } from '../../support/permission/constant';
 import { PushDatasetDataChunkProps } from './api';
 import {
+  DataChunkSplitModeEnum,
   DatasetCollectionDataProcessModeEnum,
   DatasetCollectionTypeEnum,
   DatasetStatusEnum,
@@ -14,6 +15,7 @@ import { Permission } from '../../support/permission/controller';
 import { APIFileServer, FeishuServer, YuqueServer } from './apiDataset';
 import { SourceMemberType } from 'support/user/type';
 import { DatasetDataIndexTypeEnum } from './data/constants';
+import { ChunkSettingModeEnum } from './constants';
 
 export type DatasetSchemaType = {
   _id: string;
@@ -88,7 +90,12 @@ export type DatasetCollectionSchemaType = {
   autoIndexes?: boolean;
   imageIndex?: boolean;
   trainingType: DatasetCollectionDataProcessModeEnum;
-  chunkSize: number;
+
+  chunkSettingMode?: ChunkSettingModeEnum;
+  chunkSplitMode?: DataChunkSplitModeEnum;
+
+  chunkSize?: number;
+  indexSize?: number;
   chunkSplitter?: string;
   qaPrompt?: string;
 };
@@ -112,12 +119,15 @@ export type DatasetDataSchemaType = {
   tmbId: string;
   datasetId: string;
   collectionId: string;
-  datasetId: string;
-  collectionId: string;
   chunkIndex: number;
   updateTime: Date;
   q: string; // large chunks or question
   a: string; // answer or custom content
+  history?: {
+    q: string;
+    a: string;
+    updateTime: Date;
+  }[];
   forbid?: boolean;
   fullTextToken: string;
   indexes: DatasetDataIndexItemType[];
